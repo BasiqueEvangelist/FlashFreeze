@@ -16,7 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PalettedContainerMixin implements PalettedContainerAccess {
     @Shadow protected abstract Object get(int index);
 
-    @Shadow protected abstract int toIndex(int x, int y, int z);
+    @Shadow
+    private static int toIndex(int x, int y, int z) {
+        throw new RuntimeException(":thonk:");
+    }
 
     @Inject(method = "setAndGetOldValue", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int index, Object value, CallbackInfoReturnable<Object> cir) {
