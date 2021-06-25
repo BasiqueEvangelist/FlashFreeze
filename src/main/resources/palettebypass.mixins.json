@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.palettebypass.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "ChunkSectionMixin",
+    "PalettedContainerAccessor",
+    "PalettedContainerMixin",
+    "PaletteMixin",
+    "UpgradeDataMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

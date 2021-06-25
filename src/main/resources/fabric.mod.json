@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "palettebypass",
+  "version": "${version}",
+
+  "name": "Palette Bypass",
+  "description": "Keep unknown blocks",
+  "authors": [
+    "BasiqueEvangelist"
+  ],
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.basiqueevangelist.palettebypass.PaletteBypass"
+    ]
+  },
+  "mixins": [
+    "palettebypass.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  }
+}
