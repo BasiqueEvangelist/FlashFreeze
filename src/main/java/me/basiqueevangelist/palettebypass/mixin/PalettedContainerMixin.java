@@ -35,7 +35,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
         }
     }
 
-    @Redirect(method = "method_21733", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Palette;getByIndex(I)Ljava/lang/Object;"), remap = false)
+    @Redirect(method = "method_21733", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Palette;getByIndex(I)Ljava/lang/Object;"))
     private Object transformStateIfNeeded(Palette<Object> palette, int index) {
         Object o = palette.getByIndex(index);
         if (o instanceof UnknownBlockState)
