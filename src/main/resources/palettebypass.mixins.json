@@ -5,12 +5,14 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ChunkSectionMixin",
+    "ChunkSerializerMixin",
     "IngredientMixin",
     "ItemStackMixin",
     "PalettedContainerAccessor",
     "PalettedContainerMixin",
     "PaletteMixin",
-    "UpgradeDataMixin"
+    "UpgradeDataMixin",
+    "WorldChunkMixin"
   ],
   "injectors": {
     "defaultRequire": 1
