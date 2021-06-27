@@ -3,16 +3,17 @@ package me.basiqueevangelist.palettebypass.mixin;
 import me.basiqueevangelist.palettebypass.PaletteBypass;
 import me.basiqueevangelist.palettebypass.PalettedContainerAccess;
 import me.basiqueevangelist.palettebypass.UnknownBlockState;
-import net.minecraft.world.chunk.Palette;
 import net.minecraft.world.chunk.PalettedContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PalettedContainer.class)
+import java.util.function.Predicate;
+
+@Mixin(value = PalettedContainer.class, priority = 900)
 public abstract class PalettedContainerMixin implements PalettedContainerAccess {
     @Shadow protected abstract Object get(int index);
 
@@ -35,12 +36,22 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
         }
     }
 
-    @Redirect(method = "method_21733", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Palette;getByIndex(I)Ljava/lang/Object;"))
-    private Object transformStateIfNeeded(Palette<Object> palette, int index) {
-        Object o = palette.getByIndex(index);
-        if (o instanceof UnknownBlockState)
-            return PaletteBypass.getForUnknown((UnknownBlockState) o);
-        return o;
+    @ModifyVariable(method = "count", at = @At("HEAD"), argsOnly = true)
+    private PalettedContainer.CountConsumer<Object> swapOutConsumer(PalettedContainer.CountConsumer<Object> consumer) {
+        return (obj, count) -> {
+            if (obj instanceof UnknownBlockState)
+                obj = PaletteBypass.getForUnknown((UnknownBlockState) obj);
+            consumer.accept(obj, count);
+        };
+    }
+
+    @ModifyVariable(method = "hasAny", at = @At("HEAD"), argsOnly = true)
+    private Predicate<Object> swapOutPredicate(Predicate<Object> original) {
+        return (obj) -> {
+            if (obj instanceof UnknownBlockState)
+                obj = PaletteBypass.getForUnknown((UnknownBlockState) obj);
+            return original.test(obj);
+        };
     }
 
     @Override
