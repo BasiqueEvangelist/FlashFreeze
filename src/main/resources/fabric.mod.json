@@ -8,6 +8,12 @@
   "authors": [
     "BasiqueEvangelist"
   ],
+  "contact": {
+    "sources": "https://github.com/BasiqueEvangelist/PaletteBypass",
+    "issues": "https://github.com/BasiqueEvangelist/PaletteBypass/issues/"
+  },
+
+  "license": "LGPL-3.0-only",
 
   "environment": "*",
   "entrypoints": {
@@ -18,6 +24,14 @@
   "mixins": [
     "palettebypass.mixins.json"
   ],
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/bRTMbKdmZt"
+      }
+    }
+  },
 
   "depends": {
     "fabricloader": ">=0.11.3",
