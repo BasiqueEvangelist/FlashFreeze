@@ -7,4 +7,4 @@ dropping any blocks or items.
 - [x] Items
 - [x] Block Entities
 - [ ] Unloadable Chunks
-- [ ] Entities
+- [x] Entities
