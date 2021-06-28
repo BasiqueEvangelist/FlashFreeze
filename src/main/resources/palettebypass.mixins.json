@@ -6,6 +6,7 @@
   "mixins": [
     "ChunkSectionMixin",
     "ChunkSerializerMixin",
+    "EntityTypeMixin",
     "IngredientMixin",
     "ItemStackMixin",
     "PalettedContainerAccessor",
