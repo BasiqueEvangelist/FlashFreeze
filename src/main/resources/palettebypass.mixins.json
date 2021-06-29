@@ -12,6 +12,8 @@
     "PalettedContainerAccessor",
     "PalettedContainerMixin",
     "PaletteMixin",
+    "ServerWorldMixin",
+    "ThreadedAnvilChunkStorageMixin",
     "UpgradeDataMixin",
     "WorldChunkMixin"
   ],
