@@ -25,7 +25,7 @@ public class WorldChunkMixin {
         map.entrySet().removeIf(entry -> blockEntities.containsKey(entry.getKey()));
     }
 
-    @Redirect(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;"))
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;", ordinal = 0))
     private Object onlyGetFromMap(Map<BlockPos, NbtCompound> map, Object key) {
         return map.get(key);
     }
