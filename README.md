@@ -8,3 +8,4 @@ dropping any blocks or items.
 - [x] Block Entities
 - [x] Unloadable Chunks
 - [x] Entities
+- [ ] Commands to check unknown blocks/entities/items/chunks
