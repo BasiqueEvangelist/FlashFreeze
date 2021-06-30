@@ -1,6 +1,6 @@
 package me.basiqueevangelist.palettebypass.mixin;
 
-import me.basiqueevangelist.palettebypass.BiomeArrayAccess;
+import me.basiqueevangelist.palettebypass.access.BiomeArrayAccess;
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.world.biome.source.BiomeArray;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,7 +1,7 @@
 package me.basiqueevangelist.palettebypass.mixin;
 
 import me.basiqueevangelist.palettebypass.PaletteBypass;
-import me.basiqueevangelist.palettebypass.PalettedContainerAccess;
+import me.basiqueevangelist.palettebypass.access.PalettedContainerAccess;
 import me.basiqueevangelist.palettebypass.UnknownBlockState;
 import net.minecraft.world.chunk.PalettedContainer;
 import org.spongepowered.asm.mixin.Mixin;

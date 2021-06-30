@@ -2,7 +2,7 @@ package me.basiqueevangelist.palettebypass.mixin;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import me.basiqueevangelist.palettebypass.BiomeArrayAccess;
+import me.basiqueevangelist.palettebypass.access.BiomeArrayAccess;
 import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;

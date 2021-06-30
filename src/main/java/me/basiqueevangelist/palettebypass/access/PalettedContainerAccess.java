@@ -1,5 +1,6 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.palettebypass.access;
 
+import me.basiqueevangelist.palettebypass.UnknownBlockState;
 import org.jetbrains.annotations.Nullable;
 
 public interface PalettedContainerAccess {
