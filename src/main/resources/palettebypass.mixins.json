@@ -4,6 +4,8 @@
   "package": "me.basiqueevangelist.palettebypass.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BiomeArrayMixin",
+    "ChunkDataS2CPacketMixin",
     "ChunkSectionMixin",
     "ChunkSerializerMixin",
     "EntityTypeMixin",
@@ -12,6 +14,7 @@
     "PalettedContainerAccessor",
     "PalettedContainerMixin",
     "PaletteMixin",
+    "PersistentDynamicRegistryHandlerMixin",
     "ServerWorldMixin",
     "ThreadedAnvilChunkStorageMixin",
     "UpgradeDataMixin",
