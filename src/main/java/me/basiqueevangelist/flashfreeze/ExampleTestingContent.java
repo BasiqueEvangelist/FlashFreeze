@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.flashfreeze;
 
 import net.fabricmc.fabric.api.biome.v1.OverworldBiomes;
 import net.fabricmc.fabric.api.biome.v1.OverworldClimate;
@@ -37,7 +37,7 @@ public final class ExampleTestingContent {
                 .surfaceBuilder(ConfiguredSurfaceBuilders.BADLANDS)
                 .build())
             .build();
-        Registry.register(BuiltinRegistries.BIOME, new Identifier("palettebypass:thonk"), b);
-        OverworldBiomes.addContinentalBiome(RegistryKey.of(Registry.BIOME_KEY, new Identifier("palettebypass:thonk")), OverworldClimate.DRY, 20D);
+        Registry.register(BuiltinRegistries.BIOME, new Identifier("flashfreeze:thonk"), b);
+        OverworldBiomes.addContinentalBiome(RegistryKey.of(Registry.BIOME_KEY, new Identifier("flashfreeze:thonk")), OverworldClimate.DRY, 20D);
     }
 }

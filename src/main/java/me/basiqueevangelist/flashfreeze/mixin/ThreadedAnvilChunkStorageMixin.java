@@ -1,8 +1,8 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
 import com.mojang.datafixers.util.Either;
-import me.basiqueevangelist.palettebypass.FakeProtoChunk;
-import me.basiqueevangelist.palettebypass.FakeWorldChunk;
+import me.basiqueevangelist.flashfreeze.FakeProtoChunk;
+import me.basiqueevangelist.flashfreeze.FakeWorldChunk;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ChunkHolder;

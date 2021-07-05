@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.flashfreeze;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

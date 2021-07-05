@@ -1,6 +1,6 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.palettebypass.PaletteBypass;
+import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -23,7 +23,7 @@ public abstract class ItemStackMixin {
     private static void makeUnknownIfNeeded(NbtCompound tag, CallbackInfoReturnable<ItemStack> cir) {
         if (tag.contains("id", NbtElement.STRING_TYPE)
         && !Registry.ITEM.containsId(new Identifier(tag.getString("id")))) {
-            cir.setReturnValue(PaletteBypass.makeFakeStack(tag));
+            cir.setReturnValue(FlashFreeze.makeFakeStack(tag));
         }
     }
 

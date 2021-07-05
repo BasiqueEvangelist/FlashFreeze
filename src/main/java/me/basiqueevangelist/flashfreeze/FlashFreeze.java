@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.flashfreeze;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.BlockState;
@@ -9,10 +9,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import org.apache.logging.log4j.LogManager;
 
-public class PaletteBypass implements ModInitializer {
+public class FlashFreeze implements ModInitializer {
     @Override
     public void onInitialize() {
-        LogManager.getLogger("PaletteBypass").info("Bypassing palettes since 2021");
+//        LogManager.getLogger("PaletteBypass").info("Bypassing palettes since 2021");
 
         // ExampleTestingContent.registerBiome();
     }

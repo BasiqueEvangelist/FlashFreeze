@@ -1,6 +1,6 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.palettebypass.FabricDynamicRegistryData;
+import me.basiqueevangelist.flashfreeze.FabricDynamicRegistryData;
 import net.fabricmc.fabric.impl.registry.sync.PersistentDynamicRegistryHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;

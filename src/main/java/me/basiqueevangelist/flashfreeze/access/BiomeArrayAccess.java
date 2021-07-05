@@ -1,6 +1,6 @@
-package me.basiqueevangelist.palettebypass.access;
+package me.basiqueevangelist.flashfreeze.access;
 
-import me.basiqueevangelist.palettebypass.FabricDynamicRegistryData;
+import me.basiqueevangelist.flashfreeze.FabricDynamicRegistryData;
 import net.minecraft.util.Identifier;
 
 public interface BiomeArrayAccess {

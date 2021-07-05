@@ -1,7 +1,7 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.palettebypass.PaletteBypass;
-import me.basiqueevangelist.palettebypass.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.FlashFreeze;
+import me.basiqueevangelist.flashfreeze.UnknownBlockState;
 import me.jellysquid.mods.lithium.common.world.chunk.LithiumHashPalette;
 import net.minecraft.world.chunk.ArrayPalette;
 import net.minecraft.world.chunk.BiMapPalette;
@@ -14,7 +14,7 @@ public class PaletteMixin {
     @ModifyArg(method = "toPacket", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IdList;getRawId(Ljava/lang/Object;)I"))
     private Object transformStateIfNecessary(Object state) {
         if (state instanceof UnknownBlockState)
-            return PaletteBypass.getForUnknown((UnknownBlockState) state);
+            return FlashFreeze.getForUnknown((UnknownBlockState) state);
         else
             return state;
     }

@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.flashfreeze;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;

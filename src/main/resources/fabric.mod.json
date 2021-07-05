@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "palettebypass",
+  "id": "flashfreeze",
   "version": "${version}",
 
-  "name": "Palette Bypass",
-  "description": "Keep unknown blocks",
+  "name": "Flash Freeze",
+  "description": "Keep unknown blocks and items",
   "authors": [
     "BasiqueEvangelist"
   ],
   "contact": {
-    "sources": "https://github.com/BasiqueEvangelist/PaletteBypass",
-    "issues": "https://github.com/BasiqueEvangelist/PaletteBypass/issues/"
+    "sources": "https://github.com/BasiqueEvangelist/FlashFreeze",
+    "issues": "https://github.com/BasiqueEvangelist/FlashFreeze/issues/"
   },
 
   "license": "LGPL-3.0-only",
@@ -18,11 +18,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.basiqueevangelist.palettebypass.PaletteBypass"
+      "me.basiqueevangelist.flashfreeze.FlashFreeze"
     ]
   },
   "mixins": [
-    "palettebypass.mixins.json"
+    "flashfreeze.mixins.json"
   ],
 
   "custom": {

@@ -1,7 +1,7 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.palettebypass.PaletteBypass;
-import me.basiqueevangelist.palettebypass.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.FlashFreeze;
+import me.basiqueevangelist.flashfreeze.UnknownBlockState;
 import net.minecraft.world.chunk.PalettedContainer;
 import net.minecraft.world.chunk.UpgradeData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public class UpgradeDataMixin {
     private Object transformUnknownIfNeeded(PalettedContainer<Object> palettedContainer, int index) {
         Object o = ((PalettedContainerAccessor) palettedContainer).callGet(index);
         if (o instanceof UnknownBlockState)
-            return PaletteBypass.getForUnknown((UnknownBlockState) o);
+            return FlashFreeze.getForUnknown((UnknownBlockState) o);
         return o;
     }
 }

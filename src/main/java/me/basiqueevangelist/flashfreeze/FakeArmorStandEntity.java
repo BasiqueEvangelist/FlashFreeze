@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.flashfreeze;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.ArmorStandEntity;

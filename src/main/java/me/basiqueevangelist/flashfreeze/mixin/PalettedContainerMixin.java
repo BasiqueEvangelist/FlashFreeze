@@ -1,8 +1,8 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.palettebypass.PaletteBypass;
-import me.basiqueevangelist.palettebypass.access.PalettedContainerAccess;
-import me.basiqueevangelist.palettebypass.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.FlashFreeze;
+import me.basiqueevangelist.flashfreeze.access.PalettedContainerAccess;
+import me.basiqueevangelist.flashfreeze.UnknownBlockState;
 import net.minecraft.world.chunk.PalettedContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,14 +25,14 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
     @Inject(method = "setAndGetOldValue", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int index, Object value, CallbackInfoReturnable<Object> cir) {
         if (cir.getReturnValue() instanceof UnknownBlockState) {
-            cir.setReturnValue(PaletteBypass.getForUnknown((UnknownBlockState) cir.getReturnValue()));
+            cir.setReturnValue(FlashFreeze.getForUnknown((UnknownBlockState) cir.getReturnValue()));
         }
     }
 
     @Inject(method = "get(III)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int x, int y, int z, CallbackInfoReturnable<Object> cir) {
         if (cir.getReturnValue() instanceof UnknownBlockState) {
-            cir.setReturnValue(PaletteBypass.getForUnknown((UnknownBlockState) cir.getReturnValue()));
+            cir.setReturnValue(FlashFreeze.getForUnknown((UnknownBlockState) cir.getReturnValue()));
         }
     }
 
@@ -40,7 +40,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
     private PalettedContainer.CountConsumer<Object> swapOutConsumer(PalettedContainer.CountConsumer<Object> consumer) {
         return (obj, count) -> {
             if (obj instanceof UnknownBlockState)
-                obj = PaletteBypass.getForUnknown((UnknownBlockState) obj);
+                obj = FlashFreeze.getForUnknown((UnknownBlockState) obj);
             consumer.accept(obj, count);
         };
     }
@@ -49,7 +49,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
     private Predicate<Object> swapOutPredicate(Predicate<Object> original) {
         return (obj) -> {
             if (obj instanceof UnknownBlockState)
-                obj = PaletteBypass.getForUnknown((UnknownBlockState) obj);
+                obj = FlashFreeze.getForUnknown((UnknownBlockState) obj);
             return original.test(obj);
         };
     }

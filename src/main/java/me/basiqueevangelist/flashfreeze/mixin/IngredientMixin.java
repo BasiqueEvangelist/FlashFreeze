@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass.mixin;
+package me.basiqueevangelist.flashfreeze.mixin;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;

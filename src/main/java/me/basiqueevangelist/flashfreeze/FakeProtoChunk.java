@@ -1,4 +1,4 @@
-package me.basiqueevangelist.palettebypass;
+package me.basiqueevangelist.flashfreeze;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
