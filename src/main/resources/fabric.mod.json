@@ -6,12 +6,14 @@
   "name": "Flash Freeze",
   "description": "Keep unknown blocks and items",
   "authors": [
-    "BasiqueEvangelist"
+    "BasiqueEvangelist",
+    "Jetsparrow"
   ],
   "contact": {
     "sources": "https://github.com/BasiqueEvangelist/FlashFreeze",
     "issues": "https://github.com/BasiqueEvangelist/FlashFreeze/issues/"
   },
+  "icon": "assets/flashfreeze/icon.png",
 
   "license": "LGPL-3.0-only",
 
