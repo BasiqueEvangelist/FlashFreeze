@@ -21,6 +21,9 @@ repositories {
 	maven {
 		url "https://jitpack.io"
 	}
+	maven {
+		url "https://api.modrinth.com/maven"
+	}
 }
 
 dependencies {
@@ -35,6 +38,10 @@ dependencies {
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 	modCompileOnly "com.github.CaffeineMC.lithium-fabric:lithium:${project.lithium_version}"
+
+	modRuntime("maven.modrinth:modmenu:2.0.2") {
+		transitive = false
+	}
 }
 
 processResources {
