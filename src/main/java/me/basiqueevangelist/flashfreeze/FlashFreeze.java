@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 public class FlashFreeze implements ModInitializer {
     @Override
     public void onInitialize() {
-//        LogManager.getLogger("PaletteBypass").info("Bypassing palettes since 2021");
+        LogManager.getLogger("FlashFreeze").info("Flash freezing content since 2021");
 
         // ExampleTestingContent.registerBiome();
     }
