@@ -26,6 +26,7 @@
   "mixins": [
     "flashfreeze.mixins.json"
   ],
+  "accessWidener": "flashfreeze.accesswidener",
 
   "custom": {
     "modmenu": {
