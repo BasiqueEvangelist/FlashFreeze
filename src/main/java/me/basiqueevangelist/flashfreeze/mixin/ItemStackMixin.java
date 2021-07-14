@@ -23,7 +23,12 @@ public abstract class ItemStackMixin {
     private static void makeUnknownIfNeeded(NbtCompound tag, CallbackInfoReturnable<ItemStack> cir) {
         if (tag.contains("id", NbtElement.STRING_TYPE)
         && !Registry.ITEM.containsId(new Identifier(tag.getString("id")))) {
-            cir.setReturnValue(FlashFreeze.makeFakeStack(tag));
+            var newTagStack = new NbtCompound();
+            newTagStack.put("id", tag.get("id"));
+            newTagStack.put("Count", tag.get("Count"));
+            if (tag.contains("tag"))
+                newTagStack.put("tag", tag.get("tag"));
+            cir.setReturnValue(FlashFreeze.makeFakeStack(newTagStack));
         }
     }
 
