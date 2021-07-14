@@ -22,8 +22,8 @@ public class FlashFreeze implements ModInitializer {
         return Blocks.BEDROCK.getDefaultState();
     }
 
-    public static ItemStack makeFakeStack(NbtCompound tag) {
-        ItemStack stack = new ItemStack(Items.NETHER_STAR);
+    public static ItemStack makeFakeStack(NbtCompound tag, byte count) {
+        ItemStack stack = new ItemStack(Items.NETHER_STAR, count);
         stack.getOrCreateTag().put("OriginalData", tag);
         stack.setCustomName(new LiteralText("Unknown item: " + tag.getString("id")));
         return stack;

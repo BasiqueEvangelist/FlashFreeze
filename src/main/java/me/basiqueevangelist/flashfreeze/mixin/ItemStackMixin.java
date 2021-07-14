@@ -19,16 +19,17 @@ public abstract class ItemStackMixin {
 
     @Shadow @Nullable public abstract NbtCompound getSubTag(String key);
 
+    @Shadow private int count;
+
     @Inject(method = "fromNbt", at = @At("HEAD"), cancellable = true)
     private static void makeUnknownIfNeeded(NbtCompound tag, CallbackInfoReturnable<ItemStack> cir) {
         if (tag.contains("id", NbtElement.STRING_TYPE)
         && !Registry.ITEM.containsId(new Identifier(tag.getString("id")))) {
             var newTagStack = new NbtCompound();
             newTagStack.put("id", tag.get("id"));
-            newTagStack.put("Count", tag.get("Count"));
             if (tag.contains("tag"))
                 newTagStack.put("tag", tag.get("tag"));
-            cir.setReturnValue(FlashFreeze.makeFakeStack(newTagStack));
+            cir.setReturnValue(FlashFreeze.makeFakeStack(newTagStack, tag.getByte("Count")));
         }
     }
 
@@ -36,6 +37,7 @@ public abstract class ItemStackMixin {
     private void writeUnknownNbt(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
         if (this.tag != null && this.tag.contains("OriginalData", NbtElement.COMPOUND_TYPE)) {
             tag.copyFrom(getSubTag("OriginalData"));
+            tag.putByte("Count", (byte) count);
             cir.setReturnValue(tag);
         }
     }
