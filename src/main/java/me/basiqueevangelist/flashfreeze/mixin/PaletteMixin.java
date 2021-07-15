@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-@Mixin({ArrayPalette.class, BiMapPalette.class, LithiumHashPalette.class})
+@Mixin(value = {ArrayPalette.class, BiMapPalette.class, LithiumHashPalette.class}, priority = 400)
 public class PaletteMixin {
     @ModifyArg(method = "toPacket", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IdList;getRawId(Ljava/lang/Object;)I"))
     private Object transformStateIfNecessary(Object state) {
