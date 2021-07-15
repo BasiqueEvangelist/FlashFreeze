@@ -1,19 +1,13 @@
 package me.basiqueevangelist.flashfreeze.item;
 
 import eu.pb4.polymer.item.VirtualItem;
-import me.basiqueevangelist.flashfreeze.FakeEntity;
+import me.basiqueevangelist.flashfreeze.entity.FakeEntity;
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import me.basiqueevangelist.flashfreeze.mixin.EntityTypeAccessor;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;

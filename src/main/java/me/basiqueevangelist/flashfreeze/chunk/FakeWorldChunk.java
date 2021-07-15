@@ -1,4 +1,4 @@
-package me.basiqueevangelist.flashfreeze;
+package me.basiqueevangelist.flashfreeze.chunk;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

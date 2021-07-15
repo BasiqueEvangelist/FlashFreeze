@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.flashfreeze.FakeEntity;
+import me.basiqueevangelist.flashfreeze.entity.FakeEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;

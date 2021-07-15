@@ -1,4 +1,4 @@
-package me.basiqueevangelist.flashfreeze;
+package me.basiqueevangelist.flashfreeze.block;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;

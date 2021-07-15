@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.access;
 
-import me.basiqueevangelist.flashfreeze.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.block.UnknownBlockState;
 import org.jetbrains.annotations.Nullable;
 
 public interface PalettedContainerAccess {

@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.flashfreeze.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.block.UnknownBlockState;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;

@@ -1,7 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
-import me.basiqueevangelist.flashfreeze.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.block.UnknownBlockState;
 import me.jellysquid.mods.lithium.common.world.chunk.LithiumHashPalette;
 import net.minecraft.world.chunk.ArrayPalette;
 import net.minecraft.world.chunk.BiMapPalette;

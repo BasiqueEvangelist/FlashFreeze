@@ -1,15 +1,13 @@
-package me.basiqueevangelist.flashfreeze;
+package me.basiqueevangelist.flashfreeze.entity;
 
 import eu.pb4.polymer.entity.VirtualEntity;
+import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
