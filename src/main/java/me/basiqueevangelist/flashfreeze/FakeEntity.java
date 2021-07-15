@@ -1,27 +1,38 @@
 package me.basiqueevangelist.flashfreeze;
 
+import eu.pb4.polymer.entity.VirtualEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.Packet;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.world.World;
 
 @SuppressWarnings("EntityConstructor")
-public class FakeArmorStandEntity extends ArmorStandEntity {
-    private NbtCompound originalData;
+public class FakeEntity extends Entity implements VirtualEntity {
+    private NbtCompound originalData = new NbtCompound();
 
-    public FakeArmorStandEntity(World world, NbtCompound originalData) {
-        super(EntityType.ARMOR_STAND, world);
+    public FakeEntity(EntityType<? extends FakeEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
+    public FakeEntity(World world, NbtCompound originalData) {
+        super(FlashFreeze.FAKE_ENTITY, world);
         this.originalData = originalData;
 
         setCustomName(new LiteralText("Unknown entity " + originalData.getString("id")));
@@ -36,14 +47,27 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-
         nbt.put("OriginalData", originalData);
+    }
+
+    @Override
+    public Packet<?> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this);
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         originalData = nbt.getCompound("OriginalData");
+    }
+
+    @Override
+    protected void initDataTracker() {
+
+    }
+
+    @Override
+    public EntityType<?> getVirtualEntityType() {
+        return EntityType.ARMOR_STAND;
     }
 
     @Override
@@ -61,15 +85,16 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
         if (!source.isSourceCreativePlayer()) return false;
 
         if (source.getAttacker().isSneaking()) {
-            ItemStack droppedStack = new ItemStack(Items.ARMOR_STAND);
+            ItemStack droppedStack = new ItemStack(FlashFreeze.FAKE_ENTITY_TEMPLATE);
             var newEntityTag = originalData.copy();
             newEntityTag.remove("UUID");
             droppedStack.getOrCreateTag().put("OriginalEntityData", newEntityTag);
             droppedStack.setCustomName(new LiteralText("Unknown entity " + originalData.getString("id")));
             Block.dropStack(this.world, this.getBlockPos(), droppedStack);
         }
-        this.onBreak(source);
-        ((ServerWorld)this.world).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.getDefaultState()), this.getX(), this.getBodyY(0.6666666666666666), this.getZ(), 10, (double)(this.getWidth() / 4.0F), (double)(this.getHeight() / 4.0F), (double)(this.getWidth() / 4.0F), 0.05);
+        world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_BREAK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+
+        ((ServerWorld)this.world).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.getDefaultState()), this.getX(), this.getBodyY(0.6666666666666666), this.getZ(), 10, this.getWidth() / 4.0F, this.getHeight() / 4.0F, this.getWidth() / 4.0F, 0.05);
         this.kill();
 
         return true;

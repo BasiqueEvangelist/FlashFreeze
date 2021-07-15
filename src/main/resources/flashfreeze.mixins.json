@@ -4,11 +4,11 @@
   "package": "me.basiqueevangelist.flashfreeze.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "ArmorStandItemMixin",
     "BiomeArrayMixin",
     "ChunkDataS2CPacketMixin",
     "ChunkSectionMixin",
     "ChunkSerializerMixin",
+    "EntityTypeAccessor",
     "EntityTypeMixin",
     "IngredientMixin",
     "ItemStackMixin",

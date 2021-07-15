@@ -24,6 +24,7 @@ repositories {
 	maven {
 		url "https://api.modrinth.com/maven"
 	}
+	maven { url 'https://maven.nucleoid.xyz' }
 }
 
 loom {
@@ -46,6 +47,8 @@ dependencies {
 	modRuntime("maven.modrinth:modmenu:2.0.2") {
 		transitive = false
 	}
+
+	modImplementation include("eu.pb4:polymer:0.1.0-pre9+1.17.1")
 }
 
 processResources {
