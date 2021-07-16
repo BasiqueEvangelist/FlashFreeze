@@ -3,6 +3,7 @@ package me.basiqueevangelist.flashfreeze;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.world.World;
 
@@ -32,6 +34,8 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
 
         NbtList rot = originalData.getList("Rotation", NbtElement.FLOAT_TYPE);
         this.setRotation(rot.getFloat(0), rot.getFloat(1));
+
+        equipStack(EquipmentSlot.HEAD, new ItemStack(Items.BARRIER));
     }
 
     @Override
@@ -68,7 +72,7 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
             droppedStack.setCustomName(new LiteralText("Unknown entity " + originalData.getString("id")));
             Block.dropStack(this.world, this.getBlockPos(), droppedStack);
         }
-        this.onBreak(source);
+        this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_BREAK, this.getSoundCategory(), 1.0F, 1.0F);
         ((ServerWorld)this.world).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.getDefaultState()), this.getX(), this.getBodyY(0.6666666666666666), this.getZ(), 10, (double)(this.getWidth() / 4.0F), (double)(this.getHeight() / 4.0F), (double)(this.getWidth() / 4.0F), 0.05);
         this.kill();
 
