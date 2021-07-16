@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -16,6 +17,9 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 @SuppressWarnings("EntityConstructor")
@@ -53,6 +57,11 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
     @Override
     public boolean hasNoGravity() {
         return true;
+    }
+
+    @Override
+    public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand) {
+        return ActionResult.FAIL;
     }
 
     @Override
