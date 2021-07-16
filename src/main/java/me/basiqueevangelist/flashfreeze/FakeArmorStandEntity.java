@@ -78,6 +78,7 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
             var newEntityTag = originalData.copy();
             newEntityTag.remove("UUID");
             droppedStack.getOrCreateTag().put("OriginalEntityData", newEntityTag);
+            droppedStack.getOrCreateTag().putInt("CustomModelData", 10000);
             droppedStack.setCustomName(new LiteralText("Unknown entity " + originalData.getString("id")));
             Block.dropStack(this.world, this.getBlockPos(), droppedStack);
         }
