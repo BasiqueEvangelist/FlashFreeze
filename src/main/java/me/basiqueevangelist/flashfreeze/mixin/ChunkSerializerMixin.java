@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.flashfreeze.FakeWorldChunk;
+import me.basiqueevangelist.flashfreeze.chunk.FakeWorldChunk;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ServerWorld;

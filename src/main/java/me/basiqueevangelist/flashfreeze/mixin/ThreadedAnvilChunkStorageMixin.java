@@ -1,8 +1,8 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import com.mojang.datafixers.util.Either;
-import me.basiqueevangelist.flashfreeze.FakeProtoChunk;
-import me.basiqueevangelist.flashfreeze.FakeWorldChunk;
+import me.basiqueevangelist.flashfreeze.chunk.FakeProtoChunk;
+import me.basiqueevangelist.flashfreeze.chunk.FakeWorldChunk;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ChunkHolder;

@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.flashfreeze.FakeChunk;
+import me.basiqueevangelist.flashfreeze.chunk.FakeChunk;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
