@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.flashfreeze.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ArmorStandItemMixin",
+    "BiomeArrayMixin",
+    "ChunkDataS2CPacketMixin",
+    "ChunkSectionMixin",
+    "ChunkSerializerMixin",
+    "EntityTypeMixin",
+    "IngredientMixin",
+    "ItemStackMixin",
+    "PalettedContainerAccessor",
+    "PalettedContainerMixin",
+    "PaletteMixin",
+    "ServerWorldMixin",
+    "ThreadedAnvilChunkStorageMixin",
+    "UpgradeDataMixin",
+    "WorldChunkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

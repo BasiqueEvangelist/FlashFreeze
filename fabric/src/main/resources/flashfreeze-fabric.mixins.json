@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.flashfreeze.mixin.fabric",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "PersistentDynamicRegistryHandlerMixin",
+    "LithiumHashPaletteMixin"
+  ],
+  "client": [
+    "client.MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

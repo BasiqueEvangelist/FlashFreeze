@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "flashfreeze",
+  "version": "${version}",
+
+  "name": "Flash Freeze",
+  "description": "Keep unknown blocks and items",
+  "authors": [
+    "BasiqueEvangelist",
+    "Jetsparrow"
+  ],
+  "contact": {
+    "sources": "https://github.com/BasiqueEvangelist/FlashFreeze",
+    "issues": "https://github.com/BasiqueEvangelist/FlashFreeze/issues/"
+  },
+  "icon": "assets/flashfreeze/icon.png",
+
+  "license": "LGPL-3.0-only",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.basiqueevangelist.flashfreeze.fabric.FlashFreezeFabric"
+    ]
+  },
+  "mixins": [
+    "flashfreeze.mixins.json",
+    "flashfreeze-fabric.mixins.json"
+  ],
+  "accessWidener": "flashfreeze.accesswidener",
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/bRTMbKdmZt"
+      }
+    }
+  },
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}

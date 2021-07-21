@@ -1,3 +1,0 @@
-accessWidener v1 named
-accessible class net/minecraft/client/MinecraftClient$WorldLoadAction
-accessible method net/minecraft/entity/decoration/ArmorStandEntity onBreak (Lnet/minecraft/entity/damage/DamageSource;)V
