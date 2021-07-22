@@ -32,7 +32,7 @@ public abstract class ThreadedAnvilChunkStorageMixin {
 
     @Shadow @Nullable protected abstract NbtCompound getUpdatedChunkNbt(ChunkPos pos) throws IOException;
 
-    @Inject(method = "method_17256", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ThreadedAnvilChunkStorage;method_27054(Lnet/minecraft/util/math/ChunkPos;)V", ordinal = 1), cancellable = true)
+    @Inject(method = {"method_17256", "func_223170_j"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ThreadedAnvilChunkStorage;method_27054(Lnet/minecraft/util/math/ChunkPos;)V", ordinal = 1), cancellable = true)
     private void makeFakeChunk(ChunkPos pos, CallbackInfoReturnable<Either<Chunk, ChunkHolder.Unloaded>> cir) {
         try {
             NbtCompound updatedTag = getUpdatedChunkNbt(pos);
@@ -46,7 +46,7 @@ public abstract class ThreadedAnvilChunkStorageMixin {
         }
     }
 
-    @Redirect(method = "method_17227", at = @At(value = "NEW", target = "net/minecraft/world/chunk/WorldChunk"))
+    @Redirect(method = {"method_17227", "func_219237_a_"}, at = @At(value = "NEW", target = "net/minecraft/world/chunk/WorldChunk"))
     private WorldChunk replaceWithFakeIfNeeded(World world, ProtoChunk protoChunk) {
         if (protoChunk instanceof FakeProtoChunk)
             return new FakeWorldChunk(world, protoChunk.getPos(), ((FakeProtoChunk) protoChunk).getUpdatedTag());
