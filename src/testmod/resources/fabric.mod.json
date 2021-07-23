@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "me.basiqueevangelist.flashfreeze.testmod.FlashFreezeTestMod"
+    ],
+    "cardinal-components": [
+      "me.basiqueevangelist.flashfreeze.testmod.TestModComponents"
     ]
   },
 
@@ -28,7 +31,10 @@
       "links": {
         "modmenu.discord": "https://discord.gg/bRTMbKdmZt"
       }
-    }
+    },
+    "cardinal-components": [
+      "flashfreeze:test"
+    ]
   },
 
   "depends": {

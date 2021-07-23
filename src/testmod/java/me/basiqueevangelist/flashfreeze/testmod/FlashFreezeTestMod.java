@@ -1,5 +1,7 @@
 package me.basiqueevangelist.flashfreeze.testmod;
 
+import dev.onyxstudios.cca.api.v3.component.ComponentKey;
+import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.OverworldBiomes;
 import net.fabricmc.fabric.api.biome.v1.OverworldClimate;
@@ -14,6 +16,8 @@ import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders;
 
 public class FlashFreezeTestMod implements ModInitializer {
+    public static final ComponentKey<TestComponent> TEST_COMPONENT = ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier("flashfreeze:test"), TestComponent.class);
+
     @Override
     public void onInitialize() {
         Biome b = new Biome.Builder()

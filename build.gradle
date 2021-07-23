@@ -68,6 +68,7 @@ dependencies {
 	modCompileOnly "com.github.CaffeineMC.lithium-fabric:lithium:${project.lithium_version}"
 
 	modImplementation "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
+//	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
 
 	modRuntime("maven.modrinth:modmenu:2.0.2") {
 		transitive = false
