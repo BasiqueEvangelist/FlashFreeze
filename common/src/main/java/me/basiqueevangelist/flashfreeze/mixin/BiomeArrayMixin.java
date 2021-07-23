@@ -34,12 +34,12 @@ public class BiomeArrayMixin implements BiomeArrayAccess {
     @Unique @Nullable private Int2IntMap fakeBiomes = null;
     @Unique private int arrayPos;
 
-    @Inject(method = "<init>(Lnet/minecraft/util/collection/IndexedIterable;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/biome/source/BiomeSource;[I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;get(I)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "<init>(Lnet/minecraft/util/collection/IndexedIterable;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/biome/source/BiomeSource;[I)V", at = @At(value = "FF_CONCERN_INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;get(I)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void getArrayPos(IndexedIterable<Biome> arg, ChunkPos arg2, BiomeSource arg3, int is[], CallbackInfo ci, int i, int j, int k) {
         arrayPos = k;
     }
 
-    @Redirect(method = "<init>(Lnet/minecraft/util/collection/IndexedIterable;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/biome/source/BiomeSource;[I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;get(I)Ljava/lang/Object;"))
+    @Redirect(method = "<init>(Lnet/minecraft/util/collection/IndexedIterable;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/biome/source/BiomeSource;[I)V", at = @At(value = "FF_CONCERN_INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;get(I)Ljava/lang/Object;"))
     private Object tryGetBiome(IndexedIterable<Biome> registry, int index) {
         Biome b = registry.get(index);
         if (b == null) {

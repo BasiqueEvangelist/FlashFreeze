@@ -21,6 +21,9 @@
     "WorldChunkMixin"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "injectionPoints": [
+      "me.basiqueevangelist.flashfreeze.asm.ConstructorBeforeInvoke"
+    ]
   }
 }
