@@ -48,7 +48,7 @@ public class AbstractComponentContainerMixin {
         unknownComponents.put(new Identifier(missedKeyId), componentMap.getCompound(missedKeyId));
     }
 
-    @Inject(method = "toTag", at = @At(value = "RETURN"))
+    @Inject(method = "toTag", at = @At(value = "RETURN"), remap = false)
     private void addUnknownComponents(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
         if (unknownComponents.isEmpty()) return;
 
