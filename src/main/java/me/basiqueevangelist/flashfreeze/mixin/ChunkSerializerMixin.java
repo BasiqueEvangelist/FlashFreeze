@@ -1,13 +1,19 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
+import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
 import me.basiqueevangelist.flashfreeze.chunk.FakeWorldChunk;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.structure.StructureManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.ChunkSerializer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ProtoChunk;
+import net.minecraft.world.poi.PointOfInterestStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,5 +36,21 @@ public class ChunkSerializerMixin {
     private static void skipIfFake(ServerWorld world, Chunk chunk, CallbackInfoReturnable<NbtCompound> cir) {
         if (chunk instanceof FakeWorldChunk)
             cir.setReturnValue(((FakeWorldChunk) chunk).getUpdatedTag());
+    }
+
+    @Inject(method = "serialize", at = @At("RETURN"))
+    private static void writeCCAComponents(ServerWorld world, Chunk chunk, CallbackInfoReturnable<NbtCompound> cir) {
+        if (FabricLoader.getInstance().isModLoaded("cardinal-components-chunk")) return;
+
+        NbtCompound targetTag = cir.getReturnValue().getCompound("Level");
+        ((ChunkAccess) chunk).flashfreeze$getComponentHolder().toTag(targetTag);
+    }
+
+    @Inject(method = "deserialize", at = @At("RETURN"))
+    private static void readCCAComponents(ServerWorld world, StructureManager structureManager, PointOfInterestStorage poiStorage, ChunkPos pos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
+        if (FabricLoader.getInstance().isModLoaded("cardinal-components-chunk")) return;
+
+        NbtCompound targetTag = nbt.getCompound("Level");
+        ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(targetTag);
     }
 }
