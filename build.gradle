@@ -24,6 +24,10 @@ repositories {
 	maven {
 		url "https://api.modrinth.com/maven"
 	}
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+	}
 }
 
 loom {
@@ -42,6 +46,8 @@ dependencies {
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 	modCompileOnly "com.github.CaffeineMC.lithium-fabric:lithium:${project.lithium_version}"
+
+	modImplementation "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
 
 	modRuntime("maven.modrinth:modmenu:2.0.2") {
 		transitive = false

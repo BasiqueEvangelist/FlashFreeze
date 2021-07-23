@@ -25,7 +25,8 @@
     "ServerWorldMixin",
     "ThreadedAnvilChunkStorageMixin",
     "UpgradeDataMixin",
-    "WorldChunkMixin"
+    "WorldChunkMixin",
+    "cca.AbstractComponentContainerMixin"
   ],
   "client": [
     "client.MinecraftClientMixin"
