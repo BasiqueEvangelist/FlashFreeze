@@ -30,8 +30,28 @@ repositories {
 	}
 }
 
+sourceSets {
+	testmod {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
 loom {
 	accessWidener = file("src/main/resources/flashfreeze.accesswidener")
+
+	runs {
+		testmodClient {
+			client()
+			name = "Test Mod Client"
+			source sourceSets.testmod
+		}
+		testmodServer {
+			server()
+			name = "Test Mod Server"
+			source sourceSets.testmod
+		}
+	}
 }
 
 dependencies {
@@ -52,9 +72,19 @@ dependencies {
 	modRuntime("maven.modrinth:modmenu:2.0.2") {
 		transitive = false
 	}
+
+	testmodImplementation sourceSets.main.output
 }
 
 processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+processTestmodResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {

@@ -1,5 +1,6 @@
-package me.basiqueevangelist.flashfreeze;
+package me.basiqueevangelist.flashfreeze.testmod;
 
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.OverworldBiomes;
 import net.fabricmc.fabric.api.biome.v1.OverworldClimate;
 import net.minecraft.util.Identifier;
@@ -12,13 +13,9 @@ import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders;
 
-public final class ExampleTestingContent {
-    private ExampleTestingContent() {
-
-    }
-
-    @SuppressWarnings("deprecation")
-    public static void registerBiome() {
+public class FlashFreezeTestMod implements ModInitializer {
+    @Override
+    public void onInitialize() {
         Biome b = new Biome.Builder()
             .precipitation(Biome.Precipitation.NONE)
             .category(Biome.Category.NONE)

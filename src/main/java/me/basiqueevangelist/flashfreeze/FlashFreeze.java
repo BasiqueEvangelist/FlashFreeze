@@ -13,8 +13,6 @@ public class FlashFreeze implements ModInitializer {
     @Override
     public void onInitialize() {
         LogManager.getLogger("FlashFreeze").info("Flash freezing content since 2021");
-
-        // ExampleTestingContent.registerBiome();
     }
 
     public static BlockState getForUnknown(UnknownBlockState state) {
