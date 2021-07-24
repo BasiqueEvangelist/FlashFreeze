@@ -17,5 +17,6 @@ pluginManagement {
 include "common"
 include "fabric"
 include "forge"
+include "testmod-fabric"
 
 rootProject.name = "flashfreeze"

@@ -52,6 +52,10 @@ allprojects {
 				includeGroup "curse.maven"
 			}
 		}
+		maven {
+			name = 'Ladysnake Mods'
+			url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		}
 	}
 
 	tasks.withType(JavaCompile) {

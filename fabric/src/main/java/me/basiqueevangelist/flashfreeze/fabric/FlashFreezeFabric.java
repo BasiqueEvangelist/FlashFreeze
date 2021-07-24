@@ -7,7 +7,5 @@ public class FlashFreezeFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         FlashFreeze.init();
-
-        // ExampleTestingContent.registerBiome();
     }
 }

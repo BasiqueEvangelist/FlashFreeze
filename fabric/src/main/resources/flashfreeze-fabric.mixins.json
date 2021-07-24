@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "PersistentDynamicRegistryHandlerMixin",
-    "LithiumHashPaletteMixin"
+    "LithiumHashPaletteMixin",
+    "cca.AbstractComponentContainerMixin"
   ],
   "client": [
     "client.MinecraftClientMixin"

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "flashfreeze-testmod",
+  "version": "${version}",
+
+  "name": "Flash Freeze (Test mod)",
+  "description": "Keep unknown blocks and items",
+  "authors": [
+    "BasiqueEvangelist",
+    "Jetsparrow"
+  ],
+  "contact": {
+    "sources": "https://github.com/BasiqueEvangelist/FlashFreeze",
+    "issues": "https://github.com/BasiqueEvangelist/FlashFreeze/issues/"
+  },
+
+  "license": "LGPL-3.0-only",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.basiqueevangelist.flashfreeze.testmod.FlashFreezeTestMod"
+    ],
+    "cardinal-components": [
+      "me.basiqueevangelist.flashfreeze.testmod.TestModComponents"
+    ]
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/bRTMbKdmZt"
+      }
+    },
+    "cardinal-components": [
+      "flashfreeze:test"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.x",
+    "java": ">=16"
+  }
+}

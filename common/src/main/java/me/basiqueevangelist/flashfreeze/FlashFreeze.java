@@ -1,6 +1,5 @@
 package me.basiqueevangelist.flashfreeze;
 
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;

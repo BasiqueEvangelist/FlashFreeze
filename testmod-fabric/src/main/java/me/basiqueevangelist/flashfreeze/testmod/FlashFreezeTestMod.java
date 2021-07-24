@@ -1,6 +1,8 @@
-package me.basiqueevangelist.flashfreeze.fabric;
+package me.basiqueevangelist.flashfreeze.testmod;
 
-import me.basiqueevangelist.flashfreeze.FlashFreeze;
+import dev.onyxstudios.cca.api.v3.component.ComponentKey;
+import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.OverworldBiomes;
 import net.fabricmc.fabric.api.biome.v1.OverworldClimate;
 import net.minecraft.util.Identifier;
@@ -13,13 +15,13 @@ import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders;
 
-public final class ExampleTestingContent {
-    private ExampleTestingContent() {
-
-    }
+public class FlashFreezeTestMod implements ModInitializer {
+    public static final String MODID = "flashfreeze-testmod";
+    public static final ComponentKey<TestComponent> TEST_COMPONENT = ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier("flashfreeze:test"), TestComponent.class);
 
     @SuppressWarnings("deprecation")
-    public static void registerBiome() {
+    @Override
+    public void onInitialize() {
         Biome b = new Biome.Builder()
             .precipitation(Biome.Precipitation.NONE)
             .category(Biome.Category.NONE)
@@ -38,7 +40,7 @@ public final class ExampleTestingContent {
                 .surfaceBuilder(ConfiguredSurfaceBuilders.BADLANDS)
                 .build())
             .build();
-        Registry.register(BuiltinRegistries.BIOME, new Identifier(FlashFreeze.MODID, "thonk"), b);
-        OverworldBiomes .addContinentalBiome(RegistryKey.of(Registry.BIOME_KEY, new Identifier(FlashFreeze.MODID, "thonk")), OverworldClimate.DRY, 20D);
+        Registry.register(BuiltinRegistries.BIOME, new Identifier(MODID, "thonk"), b);
+        OverworldBiomes .addContinentalBiome(RegistryKey.of(Registry.BIOME_KEY, new Identifier(MODID, "thonk")), OverworldClimate.DRY, 20D);
     }
 }
