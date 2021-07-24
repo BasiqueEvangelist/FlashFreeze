@@ -22,7 +22,7 @@ public class CapabilityDispatcherMixin {
 
     @Unique private final Map<Identifier, NbtElement> unknownCapabilities = new HashMap<>();
 
-    @Inject(method = "deserializeNBT", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/common/util/INBTSerializable;deserializeNBT(Lnet/minecraft/nbt/NbtElement;)V"), locals = LocalCapture.PRINT)
+    @Inject(method = "deserializeNBT", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/common/util/INBTSerializable;deserializeNBT(Lnet/minecraft/nbt/NbtElement;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void removeReadCapabilityTag(NbtCompound tag, CallbackInfo ci, int x) {
         tag.remove(names[x]);
     }

@@ -24,7 +24,7 @@ public class FlashFreezeTestMod {
     public static Capability<TestComponent> TEST_COMPONENT = null;
 
     public FlashFreezeTestMod() {
-        MinecraftForge.EVENT_BUS.register(FlashFreezeTestMod.class);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
@@ -33,27 +33,27 @@ public class FlashFreezeTestMod {
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
+    public void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
         event.addCapability(new Identifier(MODID, "test"), new TestComponentImpl());
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesBlockEntity(AttachCapabilitiesEvent<BlockEntity> event) {
+    public void onAttachCapabilitiesBlockEntity(AttachCapabilitiesEvent<BlockEntity> event) {
         event.addCapability(new Identifier(MODID, "test"), new TestComponentImpl());
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesItem(AttachCapabilitiesEvent<ItemStack> event) {
+    public void onAttachCapabilitiesItem(AttachCapabilitiesEvent<ItemStack> event) {
         event.addCapability(new Identifier(MODID, "test"), new TestComponentImpl());
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesWorld(AttachCapabilitiesEvent<World> event) {
+    public void onAttachCapabilitiesWorld(AttachCapabilitiesEvent<World> event) {
         event.addCapability(new Identifier(MODID, "test"), new TestComponentImpl());
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesChunk(AttachCapabilitiesEvent<Chunk> event) {
+    public void onAttachCapabilitiesChunk(AttachCapabilitiesEvent<Chunk> event) {
         event.addCapability(new Identifier(MODID, "test"), new TestComponentImpl());
     }
 }

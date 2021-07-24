@@ -7,7 +7,7 @@ loom {
         it.add(project(":forge").sourceSets.main)
     }
 
-    mixinConfigs = ["common-components-forge.mixins.json"]
+    mixinConfigs = ["flashfreeze-forge.mixins.json", "flashfreeze.mixins.json"]
 }
 
 architectury {
