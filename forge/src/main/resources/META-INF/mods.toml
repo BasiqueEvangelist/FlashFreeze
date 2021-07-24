@@ -26,3 +26,10 @@ mandatory = true
 versionRange = "[1.16.2,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.flashfreeze]]
+modId = "architectury"
+mandatory = true
+versionRange = "[1.1.55,)"
+ordering = "AFTER"
+side = "BOTH"
