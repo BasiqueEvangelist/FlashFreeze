@@ -1,7 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
-import net.fabricmc.loader.api.FabricLoader;
+import me.shedaniel.architectury.platform.Platform;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -18,14 +18,14 @@ public class BlockEntityMixin {
 
     @Inject(method = "fromTag", at = @At("RETURN"))
     private void readCCAComponents(BlockState state, NbtCompound tag, CallbackInfo ci) {
-        if (FabricLoader.getInstance().isModLoaded("cardinal-components-block")) return;
+        if (Platform.isModLoaded("cardinal-components-block")) return;
 
         componentHolder.fromTag(tag);
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
     private void writeCCAComponents(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (FabricLoader.getInstance().isModLoaded("cardinal-components-block")) return;
+        if (Platform.isModLoaded("cardinal-components-block")) return;
 
         componentHolder.toTag(nbt);
     }

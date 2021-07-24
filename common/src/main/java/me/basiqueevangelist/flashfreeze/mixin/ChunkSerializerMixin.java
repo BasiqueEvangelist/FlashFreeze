@@ -2,8 +2,8 @@ package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
 import me.basiqueevangelist.flashfreeze.chunk.FakeWorldChunk;
+import me.shedaniel.architectury.platform.Platform;
 import me.shedaniel.architectury.utils.NbtType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
@@ -41,7 +41,7 @@ public class ChunkSerializerMixin {
 
     @Inject(method = "serialize", at = @At("RETURN"))
     private static void writeCCAComponents(ServerWorld world, Chunk chunk, CallbackInfoReturnable<NbtCompound> cir) {
-        if (FabricLoader.getInstance().isModLoaded("cardinal-components-chunk")) return;
+        if (Platform.isModLoaded("cardinal-components-chunk")) return;
 
         NbtCompound targetTag = cir.getReturnValue().getCompound("Level");
         ((ChunkAccess) chunk).flashfreeze$getComponentHolder().toTag(targetTag);
@@ -49,7 +49,7 @@ public class ChunkSerializerMixin {
 
     @Inject(method = "deserialize", at = @At("RETURN"))
     private static void readCCAComponents(ServerWorld world, StructureManager structureManager, PointOfInterestStorage poiStorage, ChunkPos pos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
-        if (FabricLoader.getInstance().isModLoaded("cardinal-components-chunk")) return;
+        if (Platform.isModLoaded("cardinal-components-chunk")) return;
 
         NbtCompound targetTag = nbt.getCompound("Level");
         ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(targetTag);

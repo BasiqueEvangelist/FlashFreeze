@@ -1,7 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
-import net.fabricmc.loader.api.FabricLoader;
+import me.shedaniel.architectury.platform.Platform;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.scoreboard.ScoreboardState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,14 +17,14 @@ public class ScoreboardStateMixin {
 
     @Inject(method = "fromTag", at = @At("RETURN"))
     private void readCCAComponents(NbtCompound tag, CallbackInfo ci) {
-        if (FabricLoader.getInstance().isModLoaded("cardinal-components-scoreboard")) return;
+        if (Platform.isModLoaded("cardinal-components-scoreboard")) return;
 
         componentHolder.fromTag(tag);
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
     private void writeCCAComponents(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (FabricLoader.getInstance().isModLoaded("cardinal-components-scoreboard")) return;
+        if (Platform.isModLoaded("cardinal-components-scoreboard")) return;
 
         componentHolder.toTag(nbt);
     }
