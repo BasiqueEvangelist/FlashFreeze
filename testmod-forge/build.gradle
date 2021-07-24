@@ -1,0 +1,28 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+loom {
+    localMods {
+        it.add(project(":forge").sourceSets.main)
+    }
+
+    mixinConfigs = ["common-components-forge.mixins.json"]
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+
+    implementation project(path: ":forge")
+    implementation(project(path: ":common")) {
+        transitive = false
+    }
+    developmentForge(project(path: ":common")) {
+        transitive = false
+    }
+}
