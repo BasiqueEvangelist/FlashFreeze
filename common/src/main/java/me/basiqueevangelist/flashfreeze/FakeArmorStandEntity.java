@@ -40,7 +40,9 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
         NbtList rot = originalData.getList("Rotation", NbtType.FLOAT);
         this.setRotation(rot.getFloat(0), rot.getFloat(1));
 
-        equipStack(EquipmentSlot.HEAD, new ItemStack(Items.BARRIER));
+        ItemStack barrierStack = new ItemStack(Items.BARRIER);
+        barrierStack.getOrCreateTag().putInt("CustomModelData", 10000);
+        equipStack(EquipmentSlot.HEAD, barrierStack);
     }
 
     @Override
