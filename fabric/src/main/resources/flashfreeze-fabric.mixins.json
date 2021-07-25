@@ -4,8 +4,14 @@
   "package": "me.basiqueevangelist.flashfreeze.mixin.fabric",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "PersistentDynamicRegistryHandlerMixin",
+    "BlockEntityMixin",
+    "ChunkSerializerMixin",
+    "EntityMixin",
+    "ItemStackMixin",
     "LithiumHashPaletteMixin",
+    "PersistentDynamicRegistryHandlerMixin",
+    "ProtoChunkMixin",
+    "WorldChunkMixin",
     "cca.AbstractComponentContainerMixin"
   ],
   "client": [
