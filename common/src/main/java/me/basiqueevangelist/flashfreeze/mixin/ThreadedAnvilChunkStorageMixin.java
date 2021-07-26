@@ -3,9 +3,8 @@ package me.basiqueevangelist.flashfreeze.mixin;
 import com.mojang.datafixers.util.Either;
 import me.basiqueevangelist.flashfreeze.chunk.FakeProtoChunk;
 import me.basiqueevangelist.flashfreeze.chunk.FakeWorldChunk;
-import me.shedaniel.architectury.utils.NbtType;
+import me.basiqueevangelist.flashfreeze.util.NbtType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.server.world.ThreadedAnvilChunkStorage;
@@ -22,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 @Mixin(ThreadedAnvilChunkStorage.class)
 public abstract class ThreadedAnvilChunkStorageMixin {

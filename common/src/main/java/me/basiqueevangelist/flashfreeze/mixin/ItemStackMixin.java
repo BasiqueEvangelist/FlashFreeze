@@ -2,8 +2,8 @@ package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
-import me.shedaniel.architectury.platform.Platform;
-import me.shedaniel.architectury.utils.NbtType;
+import me.basiqueevangelist.flashfreeze.util.NbtType;
+import me.basiqueevangelist.flashfreeze.util.Platform;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -49,14 +49,14 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "fromNbt", at = @At("RETURN"))
     private static void readCCAComponents(NbtCompound nbt, CallbackInfoReturnable<ItemStack> cir) {
-        if (Platform.isModLoaded("cardinal-components-item")) return;
+        if (Platform.isFabricModLoaded("cardinal-components-item")) return;
 
         ((ItemStackMixin)(Object) cir.getReturnValue()).componentHolder.fromTag(nbt);
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
     private void writeCCAComponents(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (Platform.isModLoaded("cardinal-components-item")) return;
+        if (Platform.isFabricModLoaded("cardinal-components-item")) return;
 
         componentHolder.toTag(nbt);
     }

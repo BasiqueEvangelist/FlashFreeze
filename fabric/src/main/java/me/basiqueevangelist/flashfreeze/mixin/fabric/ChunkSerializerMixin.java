@@ -2,7 +2,6 @@ package me.basiqueevangelist.flashfreeze.mixin.fabric;
 
 import me.basiqueevangelist.flashfreeze.fabric.access.FabricChunkAccess;
 import me.basiqueevangelist.flashfreeze.fabric.capabilities.CapabilityHolder;
-import me.shedaniel.architectury.platform.Platform;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
@@ -28,8 +27,6 @@ public class ChunkSerializerMixin {
 
     @Inject(method = "deserialize", at = @At("RETURN"))
     private static void readCapabilities(ServerWorld world, StructureManager structureManager, PointOfInterestStorage poiStorage, ChunkPos pos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
-        if (Platform.isModLoaded("cardinal-components-chunk")) return;
-
         NbtCompound targetTag = nbt.getCompound("Level");
         CapabilityHolder holder = ((FabricChunkAccess) cir.getReturnValue()).flashfreeze$getCapabilityHolder();
         if (holder != null)

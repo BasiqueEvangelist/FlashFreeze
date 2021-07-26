@@ -1,8 +1,8 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
-import me.basiqueevangelist.flashfreeze.access.PalettedContainerAccess;
 import me.basiqueevangelist.flashfreeze.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.access.PalettedContainerAccess;
 import net.minecraft.world.chunk.PalettedContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

@@ -1,7 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin.fabric.cca;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
-import me.shedaniel.architectury.utils.NbtType;
+import me.basiqueevangelist.flashfreeze.util.NbtType;
 import nerdhub.cardinal.components.api.util.container.AbstractComponentContainer;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;

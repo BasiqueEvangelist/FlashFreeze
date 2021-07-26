@@ -1,7 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
-import me.shedaniel.architectury.platform.Platform;
+import me.basiqueevangelist.flashfreeze.util.Platform;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,14 +17,14 @@ public class EntityMixin {
 
     @Inject(method = "readNbt", at = @At("RETURN"))
     private void readCCAComponents(NbtCompound nbt, CallbackInfo ci) {
-        if (Platform.isModLoaded("cardinal-components-entity")) return;
+        if (Platform.isFabricModLoaded("cardinal-components-entity")) return;
 
         componentHolder.fromTag(nbt);
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
     private void writeCCAComponents(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        if (Platform.isModLoaded("cardinal-components-entity")) return;
+        if (Platform.isFabricModLoaded("cardinal-components-entity")) return;
 
         componentHolder.toTag(nbt);
     }

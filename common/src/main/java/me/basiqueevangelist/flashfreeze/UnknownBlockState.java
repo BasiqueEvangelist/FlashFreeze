@@ -1,8 +1,7 @@
 package me.basiqueevangelist.flashfreeze;
 
-import me.shedaniel.architectury.utils.NbtType;
+import me.basiqueevangelist.flashfreeze.util.NbtType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
