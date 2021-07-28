@@ -13,7 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mixin(value = CapabilityDispatcher.class, remap = false)
@@ -22,15 +24,12 @@ public class CapabilityDispatcherMixin {
 
     @Unique private final Map<Identifier, NbtElement> unknownCapabilities = new HashMap<>();
 
-    @Inject(method = "deserializeNBT", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/common/util/INBTSerializable;deserializeNBT(Lnet/minecraft/nbt/NbtElement;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void removeReadCapabilityTag(NbtCompound tag, CallbackInfo ci, int x) {
-        tag.remove(names[x]);
-    }
-
     @Inject(method = "deserializeNBT", at = @At("RETURN"))
     private void readUnreadCapabilityTags(NbtCompound tag, CallbackInfo ci) {
+        List<String> list = Arrays.asList(names);
         for (String key : tag.getKeys()) {
-            unknownCapabilities.put(new Identifier(key), tag.get(key));
+            if (!list.contains(key))
+                unknownCapabilities.put(new Identifier(key), tag.get(key));
         }
     }
 
