@@ -34,6 +34,10 @@ public abstract class ItemStackMixin {
             newTagStack.put("id", tag.get("id"));
             if (tag.contains("tag"))
                 newTagStack.put("tag", tag.get("tag"));
+            if (tag.contains("ForgeCaps"))
+                newTagStack.put("ForgeCaps", tag.get("ForgeCaps"));
+            if (tag.contains("cardinal_components"))
+                newTagStack.put("cardinal_components", tag.get("cardinal_components"));
             cir.setReturnValue(FlashFreeze.makeFakeStack(newTagStack, tag.getByte("Count")));
         }
     }
