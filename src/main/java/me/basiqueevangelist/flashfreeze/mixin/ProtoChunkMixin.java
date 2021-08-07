@@ -1,6 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
+import me.basiqueevangelist.flashfreeze.capabilities.CapabilityHolder;
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
 import net.minecraft.world.chunk.ProtoChunk;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,5 +14,10 @@ public class ProtoChunkMixin implements ChunkAccess {
     @Override
     public ComponentHolder flashfreeze$getComponentHolder() {
         return componentHolder;
+    }
+
+    @Override
+    public CapabilityHolder flashfreeze$getCapabilityHolder() {
+        return null;
     }
 }

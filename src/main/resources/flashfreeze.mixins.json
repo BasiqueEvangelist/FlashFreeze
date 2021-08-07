@@ -26,6 +26,10 @@
     "ThreadedAnvilChunkStorageMixin",
     "UpgradeDataMixin",
     "WorldChunkMixin",
+    "capabilities.BlockEntityMixin",
+    "capabilities.ChunkSerializerMixin",
+    "capabilities.EntityMixin",
+    "capabilities.ItemStackMixin",
     "cca.AbstractComponentContainerMixin"
   ],
   "client": [

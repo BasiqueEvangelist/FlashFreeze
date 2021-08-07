@@ -1,6 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
+import me.basiqueevangelist.flashfreeze.capabilities.CapabilityHolder;
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -24,6 +25,7 @@ public class WorldChunkMixin implements ChunkAccess {
     @Shadow @Final private Map<BlockPos, NbtCompound> pendingBlockEntityNbts;
 
     @Unique private final ComponentHolder componentHolder = new ComponentHolder();
+    @Unique private final CapabilityHolder capabilityHolder = new CapabilityHolder();
 
     @Redirect(method = "runPostProcessing", at = @At(value = "INVOKE", target = "Ljava/util/Map;clear()V"))
     private void clearOnlyKnownBlockEntities(Map<BlockPos, NbtCompound> map) {
@@ -43,5 +45,10 @@ public class WorldChunkMixin implements ChunkAccess {
     @Override
     public ComponentHolder flashfreeze$getComponentHolder() {
         return componentHolder;
+    }
+
+    @Override
+    public CapabilityHolder flashfreeze$getCapabilityHolder() {
+        return capabilityHolder;
     }
 }
