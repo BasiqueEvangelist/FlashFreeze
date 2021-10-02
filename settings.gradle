@@ -5,9 +5,24 @@ pluginManagement {
             url = 'https://maven.fabricmc.net/'
         }
         maven {
+            name = 'Architectury'
+            url = "https://maven.architectury.dev/"
+        }
+        maven {
+            name = 'Minecraft Forge'
+            url = "https://maven.minecraftforge.net/"
+        }
+        maven {
             name = 'Cotton'
             url = 'https://server.bbkr.space/artifactory/libs-release/'
         }
         gradlePluginPortal()
     }
 }
+
+include("common")
+include("fabric")
+include("forge")
+include("testmod-fabric")
+
+rootProject.name = "FlashFreeze"

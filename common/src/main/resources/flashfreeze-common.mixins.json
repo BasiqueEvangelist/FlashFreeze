@@ -1,0 +1,35 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.flashfreeze.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "ArmorStandItemMixin",
+    "BiomeArrayMixin",
+    "BlockEntityMixin",
+    "ChunkDataS2CPacketMixin",
+    "ChunkSectionMixin",
+    "ChunkSerializerMixin",
+    "EntityMixin",
+    "EntityTypeMixin",
+    "IngredientMixin",
+    "ItemStackMixin",
+    "LevelPropertiesMixin",
+    "PalettedContainerAccessor",
+    "PalettedContainerMixin",
+    "PaletteMixin",
+    "ProtoChunkMixin",
+    "ReadOnlyChunkMixin",
+    "ScoreboardStateMixin",
+    "ServerWorldMixin",
+    "ThreadedAnvilChunkStorageMixin",
+    "UpgradeDataMixin",
+    "WorldChunkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1,
+    "injectionPoints": [
+      "me.basiqueevangelist.flashfreeze.asm.ConstructorBeforeInvoke"
+    ]
+  }
+}
