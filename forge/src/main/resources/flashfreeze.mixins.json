@@ -4,7 +4,6 @@
   "package": "me.basiqueevangelist.flashfreeze.mixin.forge",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "WorldChunkMixin"
   ],
   "client": [
     "client.MinecraftClientMixin"

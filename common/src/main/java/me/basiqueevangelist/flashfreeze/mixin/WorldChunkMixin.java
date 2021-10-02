@@ -30,6 +30,11 @@ public class WorldChunkMixin implements ChunkAccess {
         map.entrySet().removeIf(entry -> blockEntities.containsKey(entry.getKey()));
     }
 
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "FIELD", target = "Lnet/minecraft/world/chunk/WorldChunk;pendingBlockEntityNbts:Ljava/util/Map;", shift = At.Shift.BY, by = 2, ordinal = 0))
+    private Object onlyGetFromMap(Map<BlockPos, NbtCompound> map, Object key) {
+        return map.get(key);
+    }
+
     @Inject(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "RETURN", ordinal = 0))
     private void removeFromMap(BlockPos pos, WorldChunk.CreationType creationType, CallbackInfoReturnable<BlockEntity> cir) {
         pendingBlockEntityNbts.remove(pos);

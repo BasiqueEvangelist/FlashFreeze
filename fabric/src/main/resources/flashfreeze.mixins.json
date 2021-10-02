@@ -6,7 +6,6 @@
   "mixins": [
     "LithiumHashPaletteMixin",
     "PersistentDynamicRegistryHandlerMixin",
-    "WorldChunkMixin",
     "capabilities.BlockEntityMixin",
     "capabilities.ChunkSerializerMixin",
     "capabilities.EntityMixin",
