@@ -6,4 +6,8 @@ public class FFPlatformImpl {
     public static boolean isFabricModLoaded(String modid) {
         return FabricLoader.getInstance().isModLoaded(modid);
     }
+
+    public static boolean isClothConfigPresent() {
+        return FabricLoader.getInstance().isModLoaded("cloth-config2");
+    }
 }

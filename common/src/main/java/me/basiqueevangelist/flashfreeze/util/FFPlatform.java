@@ -11,4 +11,9 @@ public final class FFPlatform {
     public static boolean isFabricModLoaded(String modid) {
         throw new AssertionError();
     }
+
+    @ExpectPlatform
+    public static boolean isClothConfigPresent() {
+        throw new AssertionError();
+    }
 }

@@ -32,9 +32,16 @@ dependencies {
 
     modCompileOnly "maven.modrinth:lithium:${rootProject.lithium_version}"
 
-    modRuntimeOnly("com.terraformersmc:modmenu:2.0.13") {
+    modImplementation("com.terraformersmc:modmenu:2.0.13") {
         transitive = false
     }
+
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+//    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
+//        exclude(group: "net.fabricmc.fabric-api")
+//    }
 
     modImplementation "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
 //	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
