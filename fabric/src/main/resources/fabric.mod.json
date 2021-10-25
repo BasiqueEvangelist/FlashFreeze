@@ -21,6 +21,9 @@
   "entrypoints": {
     "main": [
       "me.basiqueevangelist.flashfreeze.fabric.FlashFreezeFabric"
+    ],
+    "modmenu": [
+      "me.basiqueevangelist.flashfreeze.compat.fabric.modmenu.FlashFreezeModMenu"
     ]
   },
   "mixins": [

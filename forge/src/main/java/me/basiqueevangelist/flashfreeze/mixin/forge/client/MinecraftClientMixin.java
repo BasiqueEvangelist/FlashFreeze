@@ -1,6 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin.forge.client;
 
 import com.mojang.datafixers.util.Function4;
+import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.BackupPromptScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,6 +32,8 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "startIntegratedServer(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
     private void showAlphaWarning(String worldName, CallbackInfo ci) {
+        if (!FlashFreeze.CONFIG.showWarningScreen()) return;
+
         LiteralText title = new LiteralText("You are running FlashFreeze Alpha!");
         LiteralText subtitle = new LiteralText("While everything should work OK™, it is recommended to back up your world.");
 

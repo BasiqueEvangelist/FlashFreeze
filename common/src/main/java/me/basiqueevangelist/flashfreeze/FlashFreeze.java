@@ -1,5 +1,9 @@
 package me.basiqueevangelist.flashfreeze;
 
+import me.basiqueevangelist.flashfreeze.config.FlashFreezeConfig;
+import me.basiqueevangelist.flashfreeze.config.StubFlashFreezeConfig;
+import me.basiqueevangelist.flashfreeze.config.clothconfig.FlashFreezeConfigImpl;
+import me.basiqueevangelist.flashfreeze.util.Platform;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -10,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 
 public final class FlashFreeze {
     public static final String MODID = "flashfreeze";
+    public static FlashFreezeConfig CONFIG = new StubFlashFreezeConfig();
 
     private FlashFreeze() {
 
@@ -17,6 +22,10 @@ public final class FlashFreeze {
 
     public static void init() {
         LogManager.getLogger("FlashFreeze").info("Flash freezing content since 2021");
+
+        if (Platform.isClothConfigPresent()) {
+            CONFIG = new FlashFreezeConfigImpl();
+        }
     }
 
     public static BlockState getForUnknown(UnknownBlockState state) {

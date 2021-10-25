@@ -20,6 +20,9 @@ dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
 
+    modCompileOnly("me.shedaniel.cloth:cloth-config-forge:4.11.26")
+//    modRuntime("me.shedaniel.cloth:cloth-config-forge:4.11.26")
+
     implementation(project(path: ":common")) {
         transitive = false
     }

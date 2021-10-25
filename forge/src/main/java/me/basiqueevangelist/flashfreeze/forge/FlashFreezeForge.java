@@ -1,6 +1,8 @@
 package me.basiqueevangelist.flashfreeze.forge;
 
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
+import me.basiqueevangelist.flashfreeze.config.clothconfig.FlashFreezeConfigImpl;
+import me.basiqueevangelist.flashfreeze.util.forge.PlatformImpl;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -13,5 +15,9 @@ public class FlashFreezeForge {
         ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
         FlashFreeze.init();
+
+        if (PlatformImpl.isClothConfigPresent()) {
+            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (client, parent) -> FlashFreezeConfigImpl.createScreen(parent));
+        }
     }
 }
