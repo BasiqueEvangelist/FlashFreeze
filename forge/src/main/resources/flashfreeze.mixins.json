@@ -4,6 +4,9 @@
   "package": "me.basiqueevangelist.flashfreeze.mixin.forge",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "CapabilityDispatcherMixin",
+    "capabilities.BlockEntityMixin",
+    "capabilities.CapabilityProviderMixin"
   ],
   "client": [
     "client.MinecraftClientMixin"

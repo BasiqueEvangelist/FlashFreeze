@@ -4,6 +4,11 @@ plugins {
 
 configurations {
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    dev
+}
+
+artifacts {
+    dev(jar)
 }
 
 loom {

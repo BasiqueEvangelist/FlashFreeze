@@ -24,5 +24,6 @@ include("common")
 include("fabric")
 include("forge")
 include("testmod-fabric")
+include("testmod-forge")
 
 rootProject.name = "FlashFreeze"
