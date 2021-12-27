@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collections;
 
@@ -28,7 +28,7 @@ public abstract class BlockEntityMixin extends CapabilityProvider<BlockEntityMix
     }
 
     @Inject(method = "writeIdentifyingData", at = @At("RETURN"))
-    private void writeCapabilities(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+    private void writeCapabilities(NbtCompound nbt, CallbackInfo ci) {
         NbtCompound capabilityTag = serializeCaps();
 
         if (capabilityTag != null) {

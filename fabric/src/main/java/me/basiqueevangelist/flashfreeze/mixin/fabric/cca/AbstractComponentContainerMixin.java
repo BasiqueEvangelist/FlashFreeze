@@ -41,7 +41,7 @@ public class AbstractComponentContainerMixin {
         }
     }
 
-    @Inject(method = "fromTag", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;)V"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
+    @Inject(method = "fromTag", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
     private void readUnknownComponents(NbtCompound tag, CallbackInfo ci, NbtCompound componentMap, Iterator<?> someIterator, String missedKeyId) {
         unknownComponents.put(new Identifier(missedKeyId), componentMap.getCompound(missedKeyId));
     }

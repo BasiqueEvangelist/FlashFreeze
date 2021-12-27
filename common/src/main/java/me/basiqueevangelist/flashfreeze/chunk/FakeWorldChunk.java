@@ -8,22 +8,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BuiltinBiomes;
-import net.minecraft.world.biome.source.BiomeArray;
-import net.minecraft.world.biome.source.FixedBiomeSource;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;
-import org.jetbrains.annotations.Nullable;
 
 public class FakeWorldChunk extends WorldChunk implements FakeChunk {
     private final NbtCompound updatedTag;
 
     public FakeWorldChunk(World world, ChunkPos pos, NbtCompound updatedTag) {
-        super(world, pos, new BiomeArray(world.getRegistryManager().get(Registry.BIOME_KEY), world, pos, new FixedBiomeSource(BuiltinBiomes.THE_VOID)));
+        super(world, pos);
         this.updatedTag = updatedTag;
 
         for (int i = 0; i < world.countVerticalSections(); i++) {
-            ChunkSection section = new ChunkSection(world.sectionIndexToCoord(i));
+            ChunkSection section = new ChunkSection(world.sectionIndexToCoord(i), world.getRegistryManager().get(Registry.BIOME_KEY));
             for (int x = 0; x < 16; x++)
                 for (int y = 0; y < 16; y++)
                     for (int z = 0; z < 16; z++)
@@ -32,7 +28,6 @@ public class FakeWorldChunk extends WorldChunk implements FakeChunk {
         }
     }
 
-    @Nullable
     @Override
     public BlockEntity getBlockEntity(BlockPos pos, CreationType creationType) {
         return null;
@@ -47,7 +42,6 @@ public class FakeWorldChunk extends WorldChunk implements FakeChunk {
         return Blocks.BEDROCK.getDefaultState();
     }
 
-    @Nullable
     @Override
     public BlockState setBlockState(BlockPos pos, BlockState state, boolean moved) {
         return Blocks.BEDROCK.getDefaultState();
@@ -59,7 +53,4 @@ public class FakeWorldChunk extends WorldChunk implements FakeChunk {
 
     @Override
     public void setBlockEntity(BlockEntity blockEntity) { }
-
-    @Override
-    public void loadToWorld() { }
 }

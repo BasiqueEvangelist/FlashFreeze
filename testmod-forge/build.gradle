@@ -20,11 +20,11 @@ architectury {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
 
-    implementation project(path: ":forge", configuration: "dev")
-    implementation(project(path: ":common", configuration: "dev")) {
+    implementation project(path: ":forge", configuration: "namedElements")
+    implementation(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
-    developmentForge(project(path: ":common", configuration: "dev")) {
+    developmentForge(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
 }

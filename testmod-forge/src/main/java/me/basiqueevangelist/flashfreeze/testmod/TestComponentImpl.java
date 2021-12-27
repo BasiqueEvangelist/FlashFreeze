@@ -5,8 +5,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class TestComponentImpl implements ICapabilitySerializable<NbtCompound>, TestComponent {
     private int value = 0;
@@ -21,10 +19,9 @@ public class TestComponentImpl implements ICapabilitySerializable<NbtCompound>, 
         this.value = value;
     }
 
-    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction arg) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction arg) {
         if (capability == FlashFreezeTestMod.TEST_COMPONENT) {
             return (LazyOptional<T>) LazyOptional.of(() -> this);
         }

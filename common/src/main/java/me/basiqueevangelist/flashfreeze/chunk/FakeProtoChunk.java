@@ -8,10 +8,11 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.HeightLimitView;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.UpgradeData;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -19,8 +20,8 @@ import java.util.Set;
 public class FakeProtoChunk extends ProtoChunk implements FakeChunk {
     private final NbtCompound updatedTag;
 
-    public FakeProtoChunk(ChunkPos pos, UpgradeData upgradeData, HeightLimitView world, NbtCompound updatedTag) {
-        super(pos, upgradeData, world);
+    public FakeProtoChunk(ChunkPos pos, HeightLimitView world, Registry<Biome> biomes, NbtCompound updatedTag) {
+        super(pos, UpgradeData.NO_UPGRADE_DATA, world, biomes, null);
         this.updatedTag = updatedTag;
     }
 
@@ -34,7 +35,6 @@ public class FakeProtoChunk extends ProtoChunk implements FakeChunk {
         return Fluids.EMPTY.getDefaultState();
     }
 
-    @Nullable
     @Override
     public BlockState setBlockState(BlockPos pos, BlockState state, boolean moved) {
         return Blocks.BEDROCK.getDefaultState();

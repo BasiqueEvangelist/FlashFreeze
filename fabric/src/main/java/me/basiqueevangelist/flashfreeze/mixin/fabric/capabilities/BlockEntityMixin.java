@@ -20,7 +20,7 @@ public class BlockEntityMixin {
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
-    private void writeCapabilities(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+    private void writeCapabilities(NbtCompound nbt, CallbackInfo ci) {
         capabilityHolder.toTag(nbt);
     }
 }

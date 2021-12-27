@@ -16,16 +16,18 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     // Remove the next line if you don't want to depend on the API
 
-    implementation project(path: ":fabric")
-    implementation(project(path: ":common")) {
+    implementation project(path: ":fabric", configuration: "namedElements")
+    implementation(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
-    developmentFabric(project(path: ":common")) {
+    developmentFabric(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
 
-    modImplementation "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
-//	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
+    modImplementation("com.terraformersmc:modmenu:3.0.1")
+
+    modImplementation "io.github.onyxstudios:Cardinal-Components-API:${rootProject.cca_version}"
+//	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:${rootProject.cca_version}"
 }
 
 processResources {

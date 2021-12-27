@@ -5,10 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ArmorStandItemMixin",
-    "BiomeArrayMixin",
     "BlockEntityMixin",
-    "ChunkDataS2CPacketMixin",
-    "ChunkSectionMixin",
     "ChunkSerializerMixin",
     "EntityMixin",
     "EntityTypeMixin",

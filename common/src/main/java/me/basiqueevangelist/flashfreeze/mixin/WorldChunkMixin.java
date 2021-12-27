@@ -5,10 +5,16 @@ import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.HeightLimitView;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.chunk.UpgradeData;
 import net.minecraft.world.chunk.WorldChunk;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.world.gen.chunk.BlendingData;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,26 +24,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(WorldChunk.class)
-public class WorldChunkMixin implements ChunkAccess {
-    @Shadow @Final private Map<BlockPos, BlockEntity> blockEntities;
-
-    @Shadow @Final private Map<BlockPos, NbtCompound> pendingBlockEntityNbts;
-
+public abstract class WorldChunkMixin extends Chunk implements ChunkAccess {
     @Unique private final ComponentHolder componentHolder = new ComponentHolder();
+
+    public WorldChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, HeightLimitView heightLimitView, Registry<Biome> registry, long l, ChunkSection[] chunkSections, BlendingData blendingData) {
+        super(chunkPos, upgradeData, heightLimitView, registry, l, chunkSections, blendingData);
+    }
 
     @Redirect(method = "runPostProcessing", at = @At(value = "INVOKE", target = "Ljava/util/Map;clear()V"))
     private void clearOnlyKnownBlockEntities(Map<BlockPos, NbtCompound> map) {
         map.entrySet().removeIf(entry -> blockEntities.containsKey(entry.getKey()));
     }
 
-    @Redirect(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "FIELD", target = "Lnet/minecraft/world/chunk/WorldChunk;pendingBlockEntityNbts:Ljava/util/Map;", shift = At.Shift.BY, by = 2, ordinal = 0))
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "FIELD", target = "Lnet/minecraft/world/chunk/WorldChunk;blockEntityNbts:Ljava/util/Map;", shift = At.Shift.BY, by = 2, ordinal = 0))
     private Object onlyGetFromMap(Map<BlockPos, NbtCompound> map, Object key) {
         return map.get(key);
     }
 
     @Inject(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "RETURN", ordinal = 0))
     private void removeFromMap(BlockPos pos, WorldChunk.CreationType creationType, CallbackInfoReturnable<BlockEntity> cir) {
-        pendingBlockEntityNbts.remove(pos);
+        blockEntityNbts.remove(pos);
     }
 
     @Override

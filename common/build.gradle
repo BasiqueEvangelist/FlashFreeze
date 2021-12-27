@@ -11,14 +11,6 @@ architectury {
     common()
 }
 
-configurations {
-    dev
-}
-
-artifacts {
-    dev(jar)
-}
-
 java {
     withSourcesJar()
 }

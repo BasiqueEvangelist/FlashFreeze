@@ -1,5 +1,6 @@
 package me.basiqueevangelist.flashfreeze;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
@@ -7,7 +8,7 @@ import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UnknownBlockState {
+public class UnknownBlockState implements UnknownReplacer {
     private final Identifier blockId;
     private final Map<String, String> properties;
 
@@ -31,8 +32,7 @@ public class UnknownBlockState {
         return properties;
     }
 
-    public NbtCompound toTag() {
-        NbtCompound tag = new NbtCompound();
+    public NbtCompound toTag(NbtCompound tag) {
         tag.putString("Name", blockId.toString());
         NbtCompound propsTag = new NbtCompound();
         for (Map.Entry<String, String> entry : properties.entrySet()) {
@@ -40,5 +40,10 @@ public class UnknownBlockState {
         }
         tag.put("Properties", propsTag);
         return tag;
+    }
+
+    @Override
+    public Object toReal() {
+        return Blocks.BEDROCK.getDefaultState();
     }
 }

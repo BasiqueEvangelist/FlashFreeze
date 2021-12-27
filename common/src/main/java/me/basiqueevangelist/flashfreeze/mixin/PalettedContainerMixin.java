@@ -1,9 +1,9 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.flashfreeze.FlashFreeze;
+import me.basiqueevangelist.flashfreeze.UnknownReplacer;
 import me.basiqueevangelist.flashfreeze.access.PalettedContainerAccess;
-import me.basiqueevangelist.flashfreeze.UnknownBlockState;
 import net.minecraft.world.chunk.PalettedContainer;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,30 +17,27 @@ import java.util.function.Predicate;
 public abstract class PalettedContainerMixin implements PalettedContainerAccess {
     @Shadow protected abstract Object get(int index);
 
-    @Shadow
-    private static int toIndex(int x, int y, int z) {
-        throw new RuntimeException(":thonk:");
-    }
+    @Shadow @Final private PalettedContainer.PaletteProvider paletteProvider;
 
-    @Inject(method = "setAndGetOldValue", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "swap(ILjava/lang/Object;)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int index, Object value, CallbackInfoReturnable<Object> cir) {
-        if (cir.getReturnValue() instanceof UnknownBlockState) {
-            cir.setReturnValue(FlashFreeze.getForUnknown((UnknownBlockState) cir.getReturnValue()));
+        if (cir.getReturnValue() instanceof UnknownReplacer replacer) {
+            cir.setReturnValue(replacer.toReal());
         }
     }
 
     @Inject(method = "get(III)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int x, int y, int z, CallbackInfoReturnable<Object> cir) {
-        if (cir.getReturnValue() instanceof UnknownBlockState) {
-            cir.setReturnValue(FlashFreeze.getForUnknown((UnknownBlockState) cir.getReturnValue()));
+        if (cir.getReturnValue() instanceof UnknownReplacer replacer) {
+            cir.setReturnValue(replacer.toReal());
         }
     }
 
     @ModifyVariable(method = "count", at = @At("HEAD"), argsOnly = true)
-    private PalettedContainer.CountConsumer<Object> swapOutConsumer(PalettedContainer.CountConsumer<Object> consumer) {
+    private PalettedContainer.Counter<Object> swapOutConsumer(PalettedContainer.Counter<Object> consumer) {
         return (obj, count) -> {
-            if (obj instanceof UnknownBlockState)
-                obj = FlashFreeze.getForUnknown((UnknownBlockState) obj);
+            if (obj instanceof UnknownReplacer replacer)
+                obj = replacer.toReal();
             consumer.accept(obj, count);
         };
     }
@@ -48,17 +45,17 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
     @ModifyVariable(method = "hasAny", at = @At("HEAD"), argsOnly = true)
     private Predicate<Object> swapOutPredicate(Predicate<Object> original) {
         return (obj) -> {
-            if (obj instanceof UnknownBlockState)
-                obj = FlashFreeze.getForUnknown((UnknownBlockState) obj);
+            if (obj instanceof UnknownReplacer replacer)
+                obj = replacer.toReal();
             return original.test(obj);
         };
     }
 
     @Override
-    public UnknownBlockState getUnknown(int x, int y, int z) {
-        Object o = get(toIndex(x, y, z));
-        if (o instanceof UnknownBlockState)
-            return (UnknownBlockState) o;
+    public UnknownReplacer getUnknown(int x, int y, int z) {
+        Object o = get(paletteProvider.computeIndex(x, y, z));
+        if (o instanceof UnknownReplacer replacer)
+            return replacer;
         return null;
     }
 }

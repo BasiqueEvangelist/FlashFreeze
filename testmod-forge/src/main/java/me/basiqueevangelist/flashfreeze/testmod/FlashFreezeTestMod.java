@@ -3,26 +3,23 @@ package me.basiqueevangelist.flashfreeze.testmod;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod(FlashFreezeTestMod.MODID)
 @Mod.EventBusSubscriber(modid = FlashFreezeTestMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class FlashFreezeTestMod {
     public static final String MODID = "flashfreeze_testmod";
-    @CapabilityInject(TestComponent.class)
-    public static Capability<TestComponent> TEST_COMPONENT = null;
+    public static final Capability<TestComponent> TEST_COMPONENT = CapabilityManager.get(new CapabilityToken<>() {});
 
     public FlashFreezeTestMod() {
         MinecraftForge.EVENT_BUS.register(this);

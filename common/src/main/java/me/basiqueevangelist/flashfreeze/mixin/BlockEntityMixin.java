@@ -23,7 +23,7 @@ public class BlockEntityMixin {
     }
 
     @Inject(method = "writeNbt", at = @At("RETURN"))
-    private void writeCCAComponents(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+    private void writeCCAComponents(NbtCompound nbt, CallbackInfo ci) {
         if (FFPlatform.isFabricModLoaded("cardinal-components-block")) return;
 
         componentHolder.toTag(nbt);

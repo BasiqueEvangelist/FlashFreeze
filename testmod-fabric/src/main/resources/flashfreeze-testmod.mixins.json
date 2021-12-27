@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.flashfreeze.testmod.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "VanillaBiomeParametersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -27,10 +27,9 @@ public class ChunkSerializerMixin {
     }
 
     @Inject(method = "deserialize", at = @At("RETURN"))
-    private static void readCapabilities(ServerWorld world, StructureManager structureManager, PointOfInterestStorage poiStorage, ChunkPos pos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
-        NbtCompound targetTag = nbt.getCompound("Level");
+    private static void readCapabilities(ServerWorld world, PointOfInterestStorage poiStorage, ChunkPos chunkPos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
         CapabilityHolder holder = ((FabricChunkAccess) cir.getReturnValue()).flashfreeze$getCapabilityHolder();
         if (holder != null)
-            holder.toTag(targetTag);
+            holder.toTag(nbt);
     }
 }

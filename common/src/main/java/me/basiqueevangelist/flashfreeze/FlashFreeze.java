@@ -9,13 +9,20 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.BiomeKeys;
 import org.apache.logging.log4j.LogManager;
+
+import java.lang.ref.WeakReference;
 
 public class FlashFreeze {
     public static final String MODID = "flashfreeze";
 
     public static FlashFreezeConfig CONFIG = new StubFlashFreezeConfig();
+
+    public static WeakReference<MinecraftServer> SERVER;
 
     public static void init() {
         LogManager.getLogger("FlashFreeze").info("Flash freezing content since 2021");
@@ -23,11 +30,6 @@ public class FlashFreeze {
         if (FFPlatform.isClothConfigPresent()) {
             CONFIG = new FlashFreezeConfigImpl();
         }
-    }
-
-    public static BlockState getForUnknown(UnknownBlockState state) {
-        // Returns bedrock for now.
-        return Blocks.BEDROCK.getDefaultState();
     }
 
     public static ItemStack makeFakeStack(NbtCompound tag, byte count) {

@@ -1,8 +1,7 @@
 package me.basiqueevangelist.flashfreeze.access;
 
-import me.basiqueevangelist.flashfreeze.UnknownBlockState;
-import org.jetbrains.annotations.Nullable;
+import me.basiqueevangelist.flashfreeze.UnknownReplacer;
 
 public interface PalettedContainerAccess {
-    @Nullable UnknownBlockState getUnknown(int x, int y, int z);
+    UnknownReplacer getUnknown(int x, int y, int z);
 }

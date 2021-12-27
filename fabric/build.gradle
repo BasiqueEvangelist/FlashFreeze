@@ -20,10 +20,10 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     // Remove the next line if you don't want to depend on the API
 
-    implementation(project(path: ":common", configuration: "dev")) {
+    implementation(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
-    developmentFabric(project(path: ":common", configuration: "dev")) {
+    developmentFabric(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) {
@@ -32,7 +32,7 @@ dependencies {
 
     modCompileOnly "maven.modrinth:lithium:${rootProject.lithium_version}"
 
-    modImplementation("com.terraformersmc:modmenu:2.0.13") {
+    modImplementation("com.terraformersmc:modmenu:3.0.1") {
         transitive = false
     }
 
@@ -43,8 +43,8 @@ dependencies {
 //        exclude(group: "net.fabricmc.fabric-api")
 //    }
 
-    modImplementation "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
-//	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:3.1.1"
+    modImplementation "io.github.onyxstudios:Cardinal-Components-API:${rootProject.cca_version}"
+//	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:${rootProject.cca_version}"
 }
 
 processResources {

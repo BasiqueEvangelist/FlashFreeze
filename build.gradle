@@ -1,61 +1,65 @@
 plugins {
-	id "architectury-plugin" version "3.2-SNAPSHOT"
-	id 'dev.architectury.loom' version '0.10.0-SNAPSHOT' apply false
-	id 'io.github.juuxel.loom-quiltflower' version '1.3.0' apply false
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id 'dev.architectury.loom' version '0.10.0-SNAPSHOT' apply false
+    id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1' apply false
 }
 
 architectury {
-	minecraft = rootProject.minecraft_version
+    minecraft = rootProject.minecraft_version
 }
 
 subprojects {
-	apply plugin: "dev.architectury.loom"
-//	apply plugin: "io.github.juuxel.loom-quiltflower"
+    apply plugin: "dev.architectury.loom"
+    apply plugin: "io.github.juuxel.loom-quiltflower-mini"
 
-	loom {
-		silentMojangMappingsLicense()
-	}
+    loom {
+        silentMojangMappingsLicense()
+    }
 
-	dependencies {
-		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-		mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
-	}
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
+    }
 }
 
 allprojects {
-	apply plugin: "java"
-	apply plugin: "architectury-plugin"
-	apply plugin: "maven-publish"
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
 
-	archivesBaseName = rootProject.archives_base_name
-	version = rootProject.mod_version + "+" + rootProject.minecraft_version
-	group = rootProject.maven_group
+    archivesBaseName = rootProject.archives_base_name
+    version = rootProject.mod_version + "+" + rootProject.minecraft_version
+    group = rootProject.maven_group
 
-	repositories {
-		// Add repositories to retrieve artifacts from in here.
-		// You should only use this when depending on other mods because
-		// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-		// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-		// for more information about repositories.
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
 
-		maven {
-			url "https://api.modrinth.com/maven"
-		}
-		maven {
-			url "https://maven.terraformersmc.com/releases/"
-		}
-		maven {
-			name = 'Ladysnake Mods'
-			url = 'https://ladysnake.jfrog.io/artifactory/mods'
-		}
-	}
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+        maven {
+            url "https://maven.terraformersmc.com/releases/"
+        }
+        maven {
+            name = 'Ladysnake Mods'
+            url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        }
+    }
 
-	tasks.withType(JavaCompile) {
-		options.encoding = "UTF-8"
-		options.release = 16
-	}
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 17
+    }
 
-	java {
-		withSourcesJar()
-	}
+    java {
+        withSourcesJar()
+    }
 }
