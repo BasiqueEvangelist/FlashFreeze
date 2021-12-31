@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-@Mixin({SingularPalette.class, ArrayPalette.class, BiMapPalette.class})
+@Mixin(value = {SingularPalette.class, ArrayPalette.class, BiMapPalette.class}, priority = 400)
 public class PaletteMixin {
     @ModifyArg(method = "writePacket", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;getRawId(Ljava/lang/Object;)I"))
     private Object transformStateIfNecessary(Object state) {
