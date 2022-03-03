@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.EditWorldScreen;
 import net.minecraft.resource.DataPackSettings;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.server.SaveLoader;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.world.SaveProperties;
@@ -28,7 +29,7 @@ public abstract class MinecraftClientMixin {
 
     @Shadow @Final private LevelStorage levelStorage;
 
-    @Shadow protected abstract void doLoadLevel(String string, DynamicRegistryManager.Impl arg, Function<LevelStorage.Session, DataPackSettings> function, Function4<LevelStorage.Session, DynamicRegistryManager.Impl, ResourceManager, DataPackSettings, SaveProperties> function4, boolean bl, MinecraftClient.WorldLoadAction arg2, boolean creating);
+    @Shadow protected abstract void doLoadLevel(String par1, Function<LevelStorage.Session, SaveLoader.DataPackSettingsSupplier> par2, Function<LevelStorage.Session, SaveLoader.SavePropertiesSupplier> par3, boolean par4, MinecraftClient.WorldLoadAction par5, boolean par6);
 
     @Inject(method = "startIntegratedServer(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
     private void showAlphaWarning(String worldName, CallbackInfo ci) {
@@ -42,7 +43,7 @@ public abstract class MinecraftClientMixin {
                 EditWorldScreen.onBackupConfirm(levelStorage, worldName);
             }
 
-            doLoadLevel(worldName, DynamicRegistryManager.create(), MinecraftClient::loadDataPackSettings, MinecraftClient::createSaveProperties, false, MinecraftClient.WorldLoadAction.BACKUP, false);
+            this.doLoadLevel(worldName, SaveLoader.DataPackSettingsSupplier::loadFromWorld, SaveLoader.SavePropertiesSupplier::loadFromWorld, false, MinecraftClient.WorldLoadAction.BACKUP, false);
         }, title, subtitle, false));
         ci.cancel();
     }

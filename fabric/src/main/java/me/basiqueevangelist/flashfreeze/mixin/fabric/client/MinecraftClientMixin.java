@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.EditWorldScreen;
 import net.minecraft.resource.DataPackSettings;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.server.SaveLoader;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.world.SaveProperties;
@@ -28,7 +29,7 @@ public abstract class MinecraftClientMixin {
 
     @Shadow @Final private LevelStorage levelStorage;
 
-    @Shadow protected abstract void startIntegratedServer(String worldName, DynamicRegistryManager.Impl registryTracker, Function<LevelStorage.Session, DataPackSettings> dataPackSettingsGetter, Function4<LevelStorage.Session, DynamicRegistryManager.Impl, ResourceManager, DataPackSettings, SaveProperties> savePropertiesGetter, boolean safeMode, MinecraftClient.WorldLoadAction worldLoadAction);
+    @Shadow protected abstract void startIntegratedServer(String worldName, Function<LevelStorage.Session, SaveLoader.DataPackSettingsSupplier> dataPackSettingsSupplierGetter, Function<LevelStorage.Session, SaveLoader.SavePropertiesSupplier> savePropertiesSupplierGetter, boolean safeMode, MinecraftClient.WorldLoadAction worldLoadAction);
 
     @Inject(method = "startIntegratedServer(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
     private void showAlphaWarning(String worldName, CallbackInfo ci) {
@@ -42,7 +43,7 @@ public abstract class MinecraftClientMixin {
                 EditWorldScreen.onBackupConfirm(levelStorage, worldName);
             }
 
-            startIntegratedServer(worldName, DynamicRegistryManager.create(), MinecraftClient::loadDataPackSettings, MinecraftClient::createSaveProperties, false, MinecraftClient.WorldLoadAction.BACKUP);
+            this.startIntegratedServer(worldName, SaveLoader.DataPackSettingsSupplier::loadFromWorld, SaveLoader.SavePropertiesSupplier::loadFromWorld, false, MinecraftClient.WorldLoadAction.BACKUP);
         }, title, subtitle, false));
         ci.cancel();
     }

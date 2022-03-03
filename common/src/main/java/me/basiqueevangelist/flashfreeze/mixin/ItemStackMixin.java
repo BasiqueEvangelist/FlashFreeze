@@ -53,7 +53,8 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "fromNbt", at = @At("RETURN"))
     private static void readCCAComponents(NbtCompound nbt, CallbackInfoReturnable<ItemStack> cir) {
-        if (FFPlatform.isFabricModLoaded("cardinal-components-item")) return;
+        // CCA no longer stores item components in a different subtag
+//        if (FFPlatform.isFabricModLoaded("cardinal-components-item")) return;
 
         ((ItemStackMixin)(Object) cir.getReturnValue()).componentHolder.fromTag(nbt);
     }

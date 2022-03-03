@@ -26,8 +26,8 @@ dependencies {
 
     modImplementation("com.terraformersmc:modmenu:3.0.1")
 
-    modImplementation "io.github.onyxstudios:Cardinal-Components-API:${rootProject.cca_version}"
-//	modCompileOnly "io.github.onyxstudios:Cardinal-Components-API:${rootProject.cca_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${rootProject.cca_version}"
+//	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${rootProject.cca_version}"
 }
 
 processResources {

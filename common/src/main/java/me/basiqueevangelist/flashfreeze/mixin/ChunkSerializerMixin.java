@@ -20,6 +20,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.ChunkSerializer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -37,6 +38,8 @@ import java.util.function.Function;
 
 @Mixin(ChunkSerializer.class)
 public class ChunkSerializerMixin {
+    private static Registry<Biome> ff$savedBiomeRegistry;
+
     @Redirect(method = {"method_39797", "m_196900_"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getBoolean(Ljava/lang/String;)Z"))
     private static boolean dontLoadIfUnknown(NbtCompound tag, String name) {
         if (tag.contains("id", NbtElement.STRING_TYPE)) {
@@ -57,7 +60,7 @@ public class ChunkSerializerMixin {
     private static void writeCCAComponents(ServerWorld world, Chunk chunk, CallbackInfoReturnable<NbtCompound> cir) {
         if (FFPlatform.isFabricModLoaded("cardinal-components-chunk")) return;
 
-        NbtCompound targetTag = cir.getReturnValue().getCompound("Level");
+        NbtCompound targetTag = cir.getReturnValue();
         ((ChunkAccess) chunk).flashfreeze$getComponentHolder().toTag(targetTag);
     }
 
@@ -65,8 +68,7 @@ public class ChunkSerializerMixin {
     private static void readCCAComponents(ServerWorld world, PointOfInterestStorage poiStorage, ChunkPos chunkPos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
         if (FFPlatform.isFabricModLoaded("cardinal-components-chunk")) return;
 
-        NbtCompound targetTag = nbt.getCompound("Level");
-        ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(targetTag);
+        ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(nbt);
     }
 
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;createCodec(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
@@ -96,9 +98,19 @@ public class ChunkSerializerMixin {
         };
     }
 
+    @Inject(method = "createCodec", at = @At("HEAD"))
+    private static void saveRegistry(Registry<Biome> biomeRegistry, CallbackInfoReturnable<Codec<PalettedContainer<RegistryEntry<Biome>>>> cir) {
+        ff$savedBiomeRegistry = biomeRegistry;
+    }
+
+    @Inject(method = "createCodec", at = @At("RETURN"))
+    private static void dropRegistry(Registry<Biome> biomeRegistry, CallbackInfoReturnable<Codec<PalettedContainer<RegistryEntry<Biome>>>> cir) {
+        ff$savedBiomeRegistry = null;
+    }
+
     @ModifyArg(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;createCodec(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
-    private static Codec<Object> switchBiomeCodec(IndexedIterable<Biome> idList, Codec<Biome> old, PalettedContainer.PaletteProvider provider, Object object) {
-        Registry<Biome> biomes = (Registry<Biome>) idList;
+    private static Codec<Object> switchBiomeCodec(IndexedIterable<Biome> idList, Codec<RegistryEntry<Biome>> old, PalettedContainer.PaletteProvider provider, Object object) {
+        Registry<Biome> biomes = ff$savedBiomeRegistry;
         return new Codec<>() {
             @Override
             @SuppressWarnings({"unchecked", "rawtypes"})
@@ -117,7 +129,7 @@ public class ChunkSerializerMixin {
                 if (ops instanceof NbtOps && input instanceof UnknownBiome ubs)
                     return DataResult.success((T) (NbtString.of(ubs.id().toString())));
 
-                return old.encode((Biome) input, ops, prefix);
+                return old.encode((RegistryEntry<Biome>) input, ops, prefix);
             }
         };
     }
