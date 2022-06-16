@@ -1,0 +1,41 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.basiqueevangelist.flashfreeze.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "ArmorStandItemMixin",
+    "BlockEntityMixin",
+    "ChunkSerializerMixin",
+    "EntityMixin",
+    "EntityTypeMixin",
+    "IngredientMixin",
+    "ItemStackMixin",
+    "LevelPropertiesMixin",
+    "PalettedContainerAccessor",
+    "PalettedContainerMixin",
+    "PaletteMixin",
+    "ProtoChunkMixin",
+    "ReadOnlyChunkMixin",
+    "ScoreboardStateMixin",
+    "ServerWorldMixin",
+    "ThreadedAnvilChunkStorageMixin",
+    "UpgradeDataMixin",
+    "WorldChunkMixin",
+    "LithiumHashPaletteMixin",
+    "capabilities.BlockEntityMixin",
+    "capabilities.ChunkSerializerMixin",
+    "capabilities.EntityMixin",
+    "capabilities.ItemStackMixin",
+    "capabilities.ProtoChunkMixin",
+    "capabilities.ReadOnlyChunkMixin",
+    "capabilities.WorldChunkMixin",
+    "cca.AbstractComponentContainerMixin"
+  ],
+  "client": [
+    "client.MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
