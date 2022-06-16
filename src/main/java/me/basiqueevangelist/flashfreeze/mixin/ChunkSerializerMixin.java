@@ -68,7 +68,7 @@ public class ChunkSerializerMixin {
         ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(nbt);
     }
 
-    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;createCodec(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;method_44343(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
     private static Codec<Object> switchBlockStateCodec(Codec<BlockState> old) {
         return new Codec<>() {
             @Override
@@ -105,7 +105,7 @@ public class ChunkSerializerMixin {
         ff$savedBiomeRegistry = null;
     }
 
-    @ModifyArg(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;createCodec(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
+    @ModifyArg(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;method_44347(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
     private static Codec<Object> switchBiomeCodec(IndexedIterable<Biome> idList, Codec<RegistryEntry<Biome>> old, PalettedContainer.PaletteProvider provider, Object object) {
         Registry<Biome> biomes = ff$savedBiomeRegistry;
         return new Codec<>() {

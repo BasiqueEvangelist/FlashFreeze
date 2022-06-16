@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Mixin(ThreadedAnvilChunkStorage.class)
 public abstract class ThreadedAnvilChunkStorageMixin {
@@ -30,16 +32,16 @@ public abstract class ThreadedAnvilChunkStorageMixin {
 
     @Shadow @Final ServerWorld world;
 
-    @Shadow protected abstract NbtCompound getUpdatedChunkNbt(ChunkPos pos) throws IOException;
+    @Shadow protected abstract CompletableFuture<Optional<NbtCompound>> getUpdatedChunkNbt(ChunkPos chunkPos);
 
-    @Inject(method = "method_17256", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ThreadedAnvilChunkStorage;markAsProtoChunk(Lnet/minecraft/util/math/ChunkPos;)V", ordinal = 1), cancellable = true)
-    private void makeFakeChunk(ChunkPos pos, CallbackInfoReturnable<Either<Chunk, ChunkHolder.Unloaded>> cir) {
+    @Inject(method = "recoverFromException", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ThreadedAnvilChunkStorage;markAsProtoChunk(Lnet/minecraft/util/math/ChunkPos;)V"), cancellable = true)
+    private void makeFakeChunk(Throwable throwable, ChunkPos chunkPos, CallbackInfoReturnable<Either<Chunk, ChunkHolder.Unloaded>> cir) {
         try {
-            NbtCompound updatedTag = getUpdatedChunkNbt(pos);
-            if (!updatedTag.contains("Level", NbtElement.COMPOUND_TYPE) || !updatedTag.getCompound("Level").contains("Status", NbtElement.STRING_TYPE))
+            NbtCompound updatedTag = getUpdatedChunkNbt(chunkPos).get().orElse(null);
+            if (updatedTag == null || !updatedTag.contains("Level", NbtElement.COMPOUND_TYPE) || !updatedTag.getCompound("Level").contains("Status", NbtElement.STRING_TYPE))
                 return;
-            FakeProtoChunk fake = new FakeProtoChunk(pos, world, world.getRegistryManager().get(Registry.BIOME_KEY), updatedTag);
-            mark(pos, ChunkStatus.ChunkType.PROTOCHUNK);
+            FakeProtoChunk fake = new FakeProtoChunk(chunkPos, world, world.getRegistryManager().get(Registry.BIOME_KEY), updatedTag);
+            mark(chunkPos, ChunkStatus.ChunkType.PROTOCHUNK);
             cir.setReturnValue(Either.left(fake));
         } catch (Exception ignored) {
 

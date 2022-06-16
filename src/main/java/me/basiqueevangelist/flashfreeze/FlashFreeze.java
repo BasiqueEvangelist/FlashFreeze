@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
 
 import java.lang.ref.WeakReference;
@@ -38,7 +38,7 @@ public class FlashFreeze implements ModInitializer {
         ItemStack stack = new ItemStack(Items.NETHER_STAR, count);
         stack.getOrCreateNbt().put("OriginalData", tag);
         stack.getOrCreateNbt().putInt("CustomModelData", 10000);
-        stack.setCustomName(new LiteralText("Unknown item: " + tag.getString("id")));
+        stack.setCustomName(Text.of("Unknown item: " + tag.getString("id")));
         return stack;
     }
 }

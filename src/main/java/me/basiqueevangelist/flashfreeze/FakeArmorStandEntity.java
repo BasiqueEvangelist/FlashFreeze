@@ -16,7 +16,7 @@ import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
@@ -29,7 +29,7 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
         super(EntityType.ARMOR_STAND, world);
         this.originalData = originalData;
 
-        setCustomName(new LiteralText("Unknown entity " + originalData.getString("id")));
+        setCustomName(Text.of("Unknown entity " + originalData.getString("id")));
         setCustomNameVisible(true);
 
         NbtList pos = originalData.getList("Pos", NbtElement.DOUBLE_TYPE);
@@ -78,7 +78,7 @@ public class FakeArmorStandEntity extends ArmorStandEntity {
             newEntityTag.remove("UUID");
             droppedStack.getOrCreateNbt().put("OriginalEntityData", newEntityTag);
             droppedStack.getOrCreateNbt().putInt("CustomModelData", 10000);
-            droppedStack.setCustomName(new LiteralText("Unknown entity " + originalData.getString("id")));
+            droppedStack.setCustomName(Text.of("Unknown entity " + originalData.getString("id")));
             Block.dropStack(this.world, this.getBlockPos(), droppedStack);
         }
         this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_BREAK, this.getSoundCategory(), 1.0F, 1.0F);

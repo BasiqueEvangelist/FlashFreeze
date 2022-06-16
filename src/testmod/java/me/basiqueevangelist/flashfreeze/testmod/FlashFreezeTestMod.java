@@ -32,7 +32,6 @@ public class FlashFreezeTestMod implements ModInitializer {
         DefaultBiomeFeatures.addBadlandsVegetation(generationSettings);
         return new Biome.Builder()
             .precipitation(Biome.Precipitation.NONE)
-            .category(Biome.Category.NONE)
             .temperature(2.0F)
             .downfall(0)
             .effects(new BiomeEffects.Builder()
