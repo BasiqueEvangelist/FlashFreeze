@@ -13,7 +13,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 
@@ -30,7 +30,7 @@ public class FlashFreeze implements ModInitializer {
     public static final UnknownItemItem UNKNOWN_ITEM = new UnknownItemItem();
 
     public void onInitialize() {
-        LogManager.getLogger("FlashFreeze").info("Flash freezing content since 2021");
+        LoggerFactory.getLogger("FlashFreeze").info("Flash freezing content since 2021");
 
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             FlashFreeze.SERVER = new WeakReference<>(server);
