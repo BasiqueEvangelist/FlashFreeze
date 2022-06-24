@@ -77,7 +77,7 @@ public class ChunkSerializerMixin {
                 if (ops instanceof NbtOps && input instanceof NbtCompound tag) {
                     if (tag.contains("Name", NbtElement.STRING_TYPE)) {
                         if (!Registry.BLOCK.containsId(new Identifier(tag.getString("Name")))) {
-                            return DataResult.success(Pair.of(new UnknownBlockState(tag), ops.empty()));
+                            return DataResult.success(Pair.of(UnknownBlockState.fromTag(tag), ops.empty()));
                         }
                     }
                 }

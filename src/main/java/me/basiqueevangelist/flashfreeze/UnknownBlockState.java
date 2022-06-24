@@ -1,6 +1,5 @@
 package me.basiqueevangelist.flashfreeze;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
@@ -8,13 +7,11 @@ import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UnknownBlockState implements UnknownReplacer {
-    private final Identifier blockId;
-    private final Map<String, String> properties;
+public record UnknownBlockState(Identifier blockId, Map<String, String> properties) implements UnknownReplacer {
+    public static UnknownBlockState fromTag(NbtCompound tag) {
+        Identifier blockId = new Identifier(tag.getString("Name"));
+        Map<String, String> properties = new HashMap<>();
 
-    public UnknownBlockState(NbtCompound tag) {
-        blockId = new Identifier(tag.getString("Name"));
-        properties = new HashMap<>();
         if (tag.contains("Properties", NbtElement.COMPOUND_TYPE)) {
             NbtCompound propertiesTag = tag.getCompound("Properties");
 
@@ -22,14 +19,8 @@ public class UnknownBlockState implements UnknownReplacer {
                 properties.put(key, propertiesTag.getString(key));
             }
         }
-    }
 
-    public Identifier getBlockId() {
-        return blockId;
-    }
-
-    public Map<String, String> getProperties() {
-        return properties;
+        return new UnknownBlockState(blockId, properties);
     }
 
     public NbtCompound toTag(NbtCompound tag) {
@@ -44,6 +35,6 @@ public class UnknownBlockState implements UnknownReplacer {
 
     @Override
     public Object toReal() {
-        return Blocks.BEDROCK.getDefaultState();
+        return FlashFreeze.UNKNOWN_BLOCK.getDefaultState();
     }
 }
