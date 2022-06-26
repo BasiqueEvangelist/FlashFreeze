@@ -6,6 +6,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public record UnknownBlockState(Identifier blockId, Map<String, String> properties) implements UnknownReplacer {
     public static UnknownBlockState fromTag(NbtCompound tag) {
@@ -31,6 +32,31 @@ public record UnknownBlockState(Identifier blockId, Map<String, String> properti
         }
         tag.put("Properties", propsTag);
         return tag;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(blockId);
+
+        if (!properties.isEmpty()) {
+            boolean isFirst = true;
+
+            sb.append('[');
+
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                if (!isFirst)
+                    sb.append(',');
+
+                isFirst = false;
+
+                sb.append(entry.getKey()).append('=').append(entry.getValue());
+            }
+
+            sb.append(']');
+        }
+
+        return sb.toString();
     }
 
     @Override

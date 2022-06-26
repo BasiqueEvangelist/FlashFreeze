@@ -1,11 +1,13 @@
 package me.basiqueevangelist.flashfreeze;
 
 import me.basiqueevangelist.flashfreeze.block.UnknownBlockBlock;
+import me.basiqueevangelist.flashfreeze.command.LookupCommand;
 import me.basiqueevangelist.flashfreeze.config.FlashFreezeConfig;
 import me.basiqueevangelist.flashfreeze.config.StubFlashFreezeConfig;
 import me.basiqueevangelist.flashfreeze.config.clothconfig.FlashFreezeConfigImpl;
 import me.basiqueevangelist.flashfreeze.item.UnknownItemItem;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemStack;
@@ -35,6 +37,8 @@ public class FlashFreeze implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             FlashFreeze.SERVER = new WeakReference<>(server);
         });
+
+        CommandRegistrationCallback.EVENT.register(LookupCommand::register);
 
         Registry.register(Registry.BLOCK, id("unknown_block"), UNKNOWN_BLOCK);
         Registry.register(Registry.ITEM, id("unknown_item"), UNKNOWN_ITEM);
