@@ -33,9 +33,6 @@
         "capabilities.WorldChunkMixin",
         "cca.AbstractComponentContainerMixin"
     ],
-    "client": [
-        "client.MinecraftClientMixin"
-    ],
     "injectors": {
         "defaultRequire": 1
   }
