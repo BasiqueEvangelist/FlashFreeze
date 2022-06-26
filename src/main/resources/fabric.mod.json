@@ -24,9 +24,6 @@
     ],
     "client": [
       "me.basiqueevangelist.flashfreeze.client.FlashFreezeClient"
-    ],
-    "modmenu": [
-      "me.basiqueevangelist.flashfreeze.compat.modmenu.FlashFreezeModMenu"
     ]
   },
   "mixins": [
