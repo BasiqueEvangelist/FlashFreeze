@@ -25,7 +25,7 @@ public class UnknownItemItem extends Item implements PolymerItem, PolymerKeepMod
         if (stack.hasNbt()
          && stack.getNbt().contains("OriginalData", NbtElement.COMPOUND_TYPE)
          && stack.getOrCreateSubNbt("OriginalData").contains("id", NbtElement.STRING_TYPE)) {
-            return Text.of("Unknown item: " + stack.getOrCreateSubNbt("OriginalData").getString("id"));
+            return Text.of(stack.getOrCreateSubNbt("OriginalData").getString("id"));
         }
 
         return super.getName(stack);
