@@ -6,10 +6,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -19,9 +22,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
+@Pseudo
 @Mixin(AbstractComponentContainer.class)
 public class AbstractComponentContainerMixin {
-    @Unique private final Map<Identifier, NbtCompound> unknownComponents = new HashMap<>();
+    @Unique private final Map<String, NbtCompound> unknownComponents = new HashMap<>();
 
     @Inject(method = "fromTag", at = @At("HEAD"), remap = false)
     private void readUnknownComponentsFromList(NbtCompound tag, CallbackInfo ci) {
@@ -31,8 +35,9 @@ public class AbstractComponentContainerMixin {
             NbtList components = tag.getList("cardinal_components", NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < components.size(); i++) {
                 NbtCompound componentTag = components.getCompound(i);
-                Identifier componentId = new Identifier(componentTag.getString("componentId"));
-                if (ComponentRegistry.get(componentId) == null) {
+                String componentId = componentTag.getString("componentId");
+                Identifier parsedId = Identifier.tryParse(componentId);
+                if (parsedId == null || ComponentRegistry.get(parsedId) == null) {
                     NbtCompound newComponentTag = componentTag.copy();
                     newComponentTag.remove("componentId");
                     unknownComponents.put(componentId, newComponentTag);
@@ -41,9 +46,14 @@ public class AbstractComponentContainerMixin {
         }
     }
 
+    @Redirect(method = "fromTag", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"))
+    private void shhhhhhhhhh(Logger instance, String s, Object o1, Object o2) {
+
+    }
+
     @Inject(method = "fromTag", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
     private void readUnknownComponents(NbtCompound tag, CallbackInfo ci, NbtCompound componentMap, Iterator<?> someIterator, String missedKeyId) {
-        unknownComponents.put(new Identifier(missedKeyId), componentMap.getCompound(missedKeyId));
+        unknownComponents.put(missedKeyId, componentMap.getCompound(missedKeyId));
     }
 
     @Inject(method = "toTag", at = @At(value = "RETURN"), remap = false)
@@ -53,8 +63,8 @@ public class AbstractComponentContainerMixin {
         if (!tag.contains("cardinal_components", NbtElement.COMPOUND_TYPE)) tag.put("cardinal_components", new NbtCompound());
 
         NbtCompound componentsTag = tag.getCompound("cardinal_components");
-        for (Map.Entry<Identifier, NbtCompound> entry : unknownComponents.entrySet()) {
-            componentsTag.put(entry.getKey().toString(), entry.getValue());
+        for (Map.Entry<String, NbtCompound> entry : unknownComponents.entrySet()) {
+            componentsTag.put(entry.getKey(), entry.getValue());
         }
     }
 }

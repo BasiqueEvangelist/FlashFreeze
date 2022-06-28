@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @Mixin(value = PalettedContainer.class, priority = 900)
@@ -39,6 +40,15 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
             if (obj instanceof UnknownReplacer replacer)
                 obj = replacer.toReal();
             consumer.accept(obj, count);
+        };
+    }
+
+    @ModifyVariable(method = "method_39793", at = @At("HEAD"), argsOnly = true)
+    private Consumer<Object> swapOutConsumer(Consumer<Object> consumer) {
+        return (obj) -> {
+            if (obj instanceof UnknownReplacer replacer)
+                obj = replacer.toReal();
+            consumer.accept(obj);
         };
     }
 

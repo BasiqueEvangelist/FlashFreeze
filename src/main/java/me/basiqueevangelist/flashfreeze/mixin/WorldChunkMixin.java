@@ -4,6 +4,7 @@ import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
@@ -44,6 +45,15 @@ public abstract class WorldChunkMixin extends Chunk implements ChunkAccess {
     @Inject(method = "getBlockEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/WorldChunk$CreationType;)Lnet/minecraft/block/entity/BlockEntity;", at = @At(value = "RETURN", ordinal = 0))
     private void removeFromMap(BlockPos pos, WorldChunk.CreationType creationType, CallbackInfoReturnable<BlockEntity> cir) {
         blockEntityNbts.remove(pos);
+    }
+
+    @Inject(method = "loadBlockEntity", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 1), cancellable = true)
+    private void shhhhhhh(BlockPos pos, NbtCompound nbt, CallbackInfoReturnable<BlockEntity> cir) {
+        Identifier id = Identifier.tryParse(nbt.getString("id"));
+
+        if (id != null && !Registry.BLOCK_ENTITY_TYPE.containsId(id)) {
+            cir.setReturnValue(null);
+        }
     }
 
     @Override
