@@ -16,14 +16,12 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.ChunkSerializer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.PalettedContainer;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,8 +33,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChunkSerializer.class)
 public class ChunkSerializerMixin {
-    private static Registry<Biome> ff$savedBiomeRegistry;
-
     @Redirect(method = "method_39797", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getBoolean(Ljava/lang/String;)Z"))
     private static boolean dontLoadIfUnknown(NbtCompound tag, String name) {
         if (tag.contains("id", NbtElement.STRING_TYPE)) {
@@ -95,38 +91,26 @@ public class ChunkSerializerMixin {
         };
     }
 
-    @Inject(method = "createCodec", at = @At("HEAD"))
-    private static void saveRegistry(Registry<Biome> biomeRegistry, CallbackInfoReturnable<Codec<PalettedContainer<RegistryEntry<Biome>>>> cir) {
-        ff$savedBiomeRegistry = biomeRegistry;
-    }
-
-    @Inject(method = "createCodec", at = @At("RETURN"))
-    private static void dropRegistry(Registry<Biome> biomeRegistry, CallbackInfoReturnable<Codec<PalettedContainer<RegistryEntry<Biome>>>> cir) {
-        ff$savedBiomeRegistry = null;
-    }
-
-    @ModifyArg(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;method_44347(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
-    private static Codec<Object> switchBiomeCodec(IndexedIterable<Biome> idList, Codec<RegistryEntry<Biome>> old, PalettedContainer.PaletteProvider provider, Object object) {
-        Registry<Biome> biomes = ff$savedBiomeRegistry;
+    @Redirect(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/Registry;createEntryCodec()Lcom/mojang/serialization/Codec;"))
+    private static Codec<RegistryEntry<Biome>> test(Registry<Biome> biomes) {
+        var old = biomes.createEntryCodec();
         return new Codec<>() {
             @Override
-            @SuppressWarnings({"unchecked", "rawtypes"})
-            public <T> DataResult<Pair<Object, T>> decode(DynamicOps<T> ops, T input) {
+            public <T> DataResult<Pair<RegistryEntry<Biome>, T>> decode(DynamicOps<T> ops, T input) {
                 if (ops instanceof NbtOps && input instanceof NbtString tag) {
                     if (!biomes.containsId(new Identifier(tag.asString()))) {
                         return DataResult.success(Pair.of(new UnknownBiome(new Identifier(tag.asString())), ops.empty()));
                     }
                 }
-                return (DataResult) old.decode(ops, input);
+                return old.decode(ops, input);
             }
 
-            @SuppressWarnings("unchecked")
             @Override
-            public <T> DataResult<T> encode(Object input, DynamicOps<T> ops, T prefix) {
-                if (ops instanceof NbtOps && input instanceof UnknownBiome ubs)
-                    return DataResult.success((T) (NbtString.of(ubs.id().toString())));
+            public <T> DataResult<T> encode(RegistryEntry<Biome> input, DynamicOps<T> ops, T prefix) {
+                if (input instanceof UnknownBiome ubs)
+                    return Identifier.CODEC.encode(ubs.id(), ops, prefix);
 
-                return old.encode((RegistryEntry<Biome>) input, ops, prefix);
+                return old.encode(input, ops, prefix);
             }
         };
     }
