@@ -13,7 +13,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
@@ -95,19 +94,23 @@ public class ChunkSerializerMixin {
     private static Codec<RegistryEntry<Biome>> test(Registry<Biome> biomes) {
         var old = biomes.createEntryCodec();
         return new Codec<>() {
+            @SuppressWarnings({"unchecked", "rawtypes"})
             @Override
             public <T> DataResult<Pair<RegistryEntry<Biome>, T>> decode(DynamicOps<T> ops, T input) {
-                if (ops instanceof NbtOps && input instanceof NbtString tag) {
-                    if (!biomes.containsId(new Identifier(tag.asString()))) {
-                        return DataResult.success(Pair.of(new UnknownBiome(new Identifier(tag.asString())), ops.empty()));
+                var possibleUnknownBiome = Identifier.CODEC.decode(ops, input).result().map(Pair::getFirst);
+                if (possibleUnknownBiome.isPresent()) {
+                    var id = possibleUnknownBiome.get();
+                    if (!biomes.containsId(id)) {
+                        return DataResult.success((Pair) Pair.of(new UnknownBiome(id), ops.empty()));
                     }
                 }
                 return old.decode(ops, input);
             }
 
+            @SuppressWarnings("ConstantConditions")
             @Override
             public <T> DataResult<T> encode(RegistryEntry<Biome> input, DynamicOps<T> ops, T prefix) {
-                if (input instanceof UnknownBiome ubs)
+                if ((Object) input instanceof UnknownBiome ubs)
                     return Identifier.CODEC.encode(ubs.id(), ops, prefix);
 
                 return old.encode(input, ops, prefix);
