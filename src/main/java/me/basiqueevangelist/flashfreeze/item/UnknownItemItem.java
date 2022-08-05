@@ -34,9 +34,18 @@ public class UnknownItemItem extends Item implements PolymerItem, PolymerKeepMod
     @Override
     public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
         if (player != null && ServerPlayNetworking.canSend(player, FlashFreeze.MALDENHAGEN)) {
-            return FlashFreeze.UNKNOWN_ITEM;
+            return this;
         }
 
         return Items.NETHER_STAR;
+    }
+
+    @Override
+    public ItemStack getPolymerItemStack(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        if (player != null && ServerPlayNetworking.canSend(player, FlashFreeze.MALDENHAGEN)) {
+            return itemStack;
+        }
+
+        return PolymerItem.super.getPolymerItemStack(itemStack, player);
     }
 }

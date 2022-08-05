@@ -43,9 +43,7 @@
     "fabricloader": ">=0.11.3",
     "fabric": "*",
     "minecraft": "1.19.x",
-    "java": ">=16"
-  },
-  "breaks": {
-    "lithium": "*"
+    "java": ">=16",
+    "polymer": "*"
   }
 }
