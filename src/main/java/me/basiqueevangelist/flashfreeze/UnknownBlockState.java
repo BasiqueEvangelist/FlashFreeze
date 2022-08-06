@@ -1,5 +1,6 @@
 package me.basiqueevangelist.flashfreeze;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
@@ -60,7 +61,7 @@ public record UnknownBlockState(Identifier blockId, Map<String, String> properti
     }
 
     @Override
-    public Object toReal() {
+    public BlockState toReal() {
         return FlashFreeze.UNKNOWN_BLOCK.getDefaultState();
     }
 }

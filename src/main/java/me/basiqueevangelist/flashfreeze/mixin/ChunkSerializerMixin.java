@@ -91,29 +91,29 @@ public class ChunkSerializerMixin {
     }
 
     @Redirect(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/Registry;createEntryCodec()Lcom/mojang/serialization/Codec;"))
-    private static Codec<RegistryEntry<Biome>> test(Registry<Biome> biomes) {
+    private static Codec<Object> test(Registry<Biome> biomes) {
         var old = biomes.createEntryCodec();
         return new Codec<>() {
             @SuppressWarnings({"unchecked", "rawtypes"})
             @Override
-            public <T> DataResult<Pair<RegistryEntry<Biome>, T>> decode(DynamicOps<T> ops, T input) {
+            public <T> DataResult<Pair<Object, T>> decode(DynamicOps<T> ops, T input) {
                 var possibleUnknownBiome = Identifier.CODEC.decode(ops, input).result().map(Pair::getFirst);
                 if (possibleUnknownBiome.isPresent()) {
                     var id = possibleUnknownBiome.get();
                     if (!biomes.containsId(id)) {
-                        return DataResult.success((Pair) Pair.of(new UnknownBiome(id), ops.empty()));
+                        return DataResult.success(Pair.of(new UnknownBiome(id), ops.empty()));
                     }
                 }
-                return old.decode(ops, input);
+                return (DataResult) old.decode(ops, input);
             }
 
-            @SuppressWarnings("ConstantConditions")
+            @SuppressWarnings("unchecked")
             @Override
-            public <T> DataResult<T> encode(RegistryEntry<Biome> input, DynamicOps<T> ops, T prefix) {
-                if ((Object) input instanceof UnknownBiome ubs)
+            public <T> DataResult<T> encode(Object input, DynamicOps<T> ops, T prefix) {
+                if (input instanceof UnknownBiome ubs)
                     return Identifier.CODEC.encode(ubs.id(), ops, prefix);
 
-                return old.encode(input, ops, prefix);
+                return old.encode((RegistryEntry<Biome>) input, ops, prefix);
             }
         };
     }
