@@ -22,7 +22,6 @@
         "ScoreboardStateMixin",
         "ServerWorldMixin",
         "ThreadedAnvilChunkStorageMixin",
-        "UpgradeDataMixin",
         "WorldChunkMixin",
         "capabilities.BlockEntityMixin",
         "capabilities.ChunkSerializerMixin",

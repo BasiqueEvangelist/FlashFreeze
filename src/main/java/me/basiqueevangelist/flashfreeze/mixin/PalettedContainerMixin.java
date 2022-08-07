@@ -27,8 +27,8 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
         }
     }
 
-    @Inject(method = "get(III)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
-    private void transformStateIfNeeded(int x, int y, int z, CallbackInfoReturnable<Object> cir) {
+    @Inject(method = "get(I)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
+    private void transformStateIfNeeded(int idx, CallbackInfoReturnable<Object> cir) {
         if (cir.getReturnValue() instanceof UnknownReplacer replacer) {
             cir.setReturnValue(replacer.toReal());
         }
