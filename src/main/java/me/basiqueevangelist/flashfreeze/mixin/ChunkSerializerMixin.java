@@ -35,7 +35,8 @@ public class ChunkSerializerMixin {
     @Redirect(method = "method_39797", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getBoolean(Ljava/lang/String;)Z"))
     private static boolean dontLoadIfUnknown(NbtCompound tag, String name) {
         if (tag.contains("id", NbtElement.STRING_TYPE)) {
-            if (!Registry.BLOCK_ENTITY_TYPE.containsId(new Identifier(tag.getString("id"))))
+            String id = tag.getString("id");
+            if (!id.equals("DUMMY") && !Registry.BLOCK_ENTITY_TYPE.containsId(new Identifier(id)))
                 return true;
         }
 
