@@ -20,6 +20,8 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
 
     @Shadow @Final private PalettedContainer.PaletteProvider paletteProvider;
 
+    private boolean flashfreeze$malding = false;
+
     @Inject(method = "swap(ILjava/lang/Object;)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int index, Object value, CallbackInfoReturnable<Object> cir) {
         if (cir.getReturnValue() instanceof UnknownReplacer replacer) {
@@ -29,6 +31,8 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
 
     @Inject(method = "get(I)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int idx, CallbackInfoReturnable<Object> cir) {
+        if (flashfreeze$malding) return;
+
         if (cir.getReturnValue() instanceof UnknownReplacer replacer) {
             cir.setReturnValue(replacer.toReal());
         }
@@ -63,7 +67,10 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
 
     @Override
     public UnknownReplacer getUnknown(int x, int y, int z) {
+        flashfreeze$malding = true;
         Object o = get(paletteProvider.computeIndex(x, y, z));
+        flashfreeze$malding = false;
+
         if (o instanceof UnknownReplacer replacer)
             return replacer;
         return null;
