@@ -6,8 +6,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public abstract class ItemStackMixin {
     @Inject(method = "fromNbt", at = @At("HEAD"), cancellable = true)
     private static void makeUnknownIfNeeded(NbtCompound tag, CallbackInfoReturnable<ItemStack> cir) {
         if (tag.contains("id", NbtElement.STRING_TYPE)
-        && !Registry.ITEM.containsId(new Identifier(tag.getString("id")))) {
+        && !Registries.ITEM.containsId(new Identifier(tag.getString("id")))) {
             var newTagStack = new NbtCompound();
             newTagStack.put("id", tag.get("id"));
             if (tag.contains("tag"))

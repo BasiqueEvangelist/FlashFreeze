@@ -4,9 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;
@@ -19,7 +19,7 @@ public class FakeWorldChunk extends WorldChunk implements FakeChunk {
         this.updatedTag = updatedTag;
 
         for (int i = 0; i < world.countVerticalSections(); i++) {
-            ChunkSection section = new ChunkSection(world.sectionIndexToCoord(i), world.getRegistryManager().get(Registry.BIOME_KEY));
+            ChunkSection section = new ChunkSection(world.getRegistryManager().get(RegistryKeys.BIOME));
             for (int x = 0; x < 16; x++)
                 for (int y = 0; y < 16; y++)
                     for (int z = 0; z < 16; z++)

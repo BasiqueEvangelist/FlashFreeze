@@ -47,7 +47,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
         };
     }
 
-    @ModifyVariable(method = "method_39793", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "forEachValue", at = @At("HEAD"), argsOnly = true)
     private Consumer<Object> swapOutConsumer(Consumer<Object> consumer) {
         return (obj) -> {
             if (obj instanceof UnknownReplacer replacer)

@@ -1,8 +1,8 @@
 package me.basiqueevangelist.flashfreeze.testmod.mixin;
 
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.util.VanillaBiomeParameters;
 import org.spongepowered.asm.mixin.Final;
@@ -18,6 +18,6 @@ public class VanillaBiomeParametersMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void addTestBiome(CallbackInfo ci) {
-        uncommonBiomes[0][1] = RegistryKey.of(Registry.BIOME_KEY, new Identifier("flashfreeze", "thonk"));
+        uncommonBiomes[0][1] = RegistryKey.of(RegistryKeys.BIOME, new Identifier("flashfreeze", "thonk"));
     }
 }

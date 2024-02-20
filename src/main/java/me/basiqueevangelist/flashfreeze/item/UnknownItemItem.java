@@ -1,11 +1,12 @@
 package me.basiqueevangelist.flashfreeze.item;
 
-import eu.pb4.polymer.api.client.PolymerClientDecoded;
-import eu.pb4.polymer.api.client.PolymerKeepModel;
-import eu.pb4.polymer.api.item.PolymerItem;
+import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
+import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -41,11 +42,11 @@ public class UnknownItemItem extends Item implements PolymerItem, PolymerKeepMod
     }
 
     @Override
-    public ItemStack getPolymerItemStack(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+    public ItemStack getPolymerItemStack(ItemStack itemStack, TooltipContext context, @Nullable ServerPlayerEntity player) {
         if (player != null && ServerPlayNetworking.canSend(player, FlashFreeze.MALDENHAGEN)) {
             return itemStack;
         }
 
-        return PolymerItem.super.getPolymerItemStack(itemStack, player);
+        return PolymerItem.super.getPolymerItemStack(itemStack, context, player);
     }
 }

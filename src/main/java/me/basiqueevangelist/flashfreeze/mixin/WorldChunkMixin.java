@@ -4,10 +4,11 @@ import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -51,7 +52,7 @@ public abstract class WorldChunkMixin extends Chunk implements ChunkAccess {
     private void shhhhhhh(BlockPos pos, NbtCompound nbt, CallbackInfoReturnable<BlockEntity> cir) {
         Identifier id = Identifier.tryParse(nbt.getString("id"));
 
-        if (id != null && !Registry.BLOCK_ENTITY_TYPE.containsId(id)) {
+        if (id != null && !Registries.BLOCK_ENTITY_TYPE.containsId(id)) {
             cir.setReturnValue(null);
         }
     }

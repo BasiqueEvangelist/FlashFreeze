@@ -13,11 +13,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.ChunkSerializer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -36,7 +37,7 @@ public class ChunkSerializerMixin {
     private static boolean dontLoadIfUnknown(NbtCompound tag, String name) {
         if (tag.contains("id", NbtElement.STRING_TYPE)) {
             String id = tag.getString("id");
-            if (!id.equals("DUMMY") && !Registry.BLOCK_ENTITY_TYPE.containsId(new Identifier(id)))
+            if (!id.equals("DUMMY") && !Registries.BLOCK_ENTITY_TYPE.containsId(new Identifier(id)))
                 return true;
         }
 
@@ -64,7 +65,7 @@ public class ChunkSerializerMixin {
         ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(nbt);
     }
 
-    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;method_44343(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;createPalettedContainerCodec(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
     private static Codec<Object> switchBlockStateCodec(Codec<BlockState> old) {
         return new Codec<>() {
             @Override
@@ -72,7 +73,7 @@ public class ChunkSerializerMixin {
             public <T> DataResult<Pair<Object, T>> decode(DynamicOps<T> ops, T input) {
                 if (ops instanceof NbtOps && input instanceof NbtCompound tag) {
                     if (tag.contains("Name", NbtElement.STRING_TYPE)) {
-                        if (!Registry.BLOCK.containsId(new Identifier(tag.getString("Name")))) {
+                        if (!Registries.BLOCK.containsId(new Identifier(tag.getString("Name")))) {
                             return DataResult.success(Pair.of(UnknownBlockState.fromTag(tag), ops.empty()));
                         }
                     }
@@ -91,7 +92,7 @@ public class ChunkSerializerMixin {
         };
     }
 
-    @Redirect(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/Registry;createEntryCodec()Lcom/mojang/serialization/Codec;"))
+    @Redirect(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registry;createEntryCodec()Lcom/mojang/serialization/Codec;"))
     private static Codec<Object> test(Registry<Biome> biomes) {
         var old = biomes.createEntryCodec();
         return new Codec<>() {

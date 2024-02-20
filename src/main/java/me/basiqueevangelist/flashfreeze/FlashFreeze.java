@@ -8,9 +8,10 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
@@ -34,8 +35,8 @@ public class FlashFreeze implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register(LookupCommand::register);
 
-        Registry.register(Registry.BLOCK, id("unknown_block"), UNKNOWN_BLOCK);
-        Registry.register(Registry.ITEM, id("unknown_item"), UNKNOWN_ITEM);
+        Registry.register(Registries.BLOCK, id("unknown_block"), UNKNOWN_BLOCK);
+        Registry.register(Registries.ITEM, id("unknown_item"), UNKNOWN_ITEM);
     }
 
     public static Identifier id(String path) {

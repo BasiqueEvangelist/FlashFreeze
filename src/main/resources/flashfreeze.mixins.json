@@ -18,7 +18,7 @@
         "PalettedContainerMixin",
         "PaletteMixin",
         "ProtoChunkMixin",
-        "ReadOnlyChunkMixin",
+        "WrapperProtoChunkMixin",
         "ScoreboardStateMixin",
         "ServerWorldMixin",
         "ThreadedAnvilChunkStorageMixin",
@@ -28,7 +28,7 @@
         "capabilities.EntityMixin",
         "capabilities.ItemStackMixin",
         "capabilities.ProtoChunkMixin",
-        "capabilities.ReadOnlyChunkMixin",
+        "capabilities.WrapperProtoChunkMixin",
         "capabilities.WorldChunkMixin",
         "cca.AbstractComponentContainerMixin"
     ],

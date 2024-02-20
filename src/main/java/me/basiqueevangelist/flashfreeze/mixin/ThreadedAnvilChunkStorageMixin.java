@@ -5,11 +5,11 @@ import me.basiqueevangelist.flashfreeze.chunk.FakeProtoChunk;
 import me.basiqueevangelist.flashfreeze.chunk.FakeWorldChunk;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.server.world.ThreadedAnvilChunkStorage;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
@@ -40,7 +40,7 @@ public abstract class ThreadedAnvilChunkStorageMixin {
             NbtCompound updatedTag = getUpdatedChunkNbt(chunkPos).get().orElse(null);
             if (updatedTag == null || !updatedTag.contains("Level", NbtElement.COMPOUND_TYPE) || !updatedTag.getCompound("Level").contains("Status", NbtElement.STRING_TYPE))
                 return;
-            FakeProtoChunk fake = new FakeProtoChunk(chunkPos, world, world.getRegistryManager().get(Registry.BIOME_KEY), updatedTag);
+            FakeProtoChunk fake = new FakeProtoChunk(chunkPos, world, world.getRegistryManager().get(RegistryKeys.BIOME), updatedTag);
             mark(chunkPos, ChunkStatus.ChunkType.PROTOCHUNK);
             cir.setReturnValue(Either.left(fake));
         } catch (Exception ignored) {
@@ -48,7 +48,7 @@ public abstract class ThreadedAnvilChunkStorageMixin {
         }
     }
 
-    @Redirect(method = "method_17227", at = @At(value = "NEW", target = "net/minecraft/world/chunk/WorldChunk"))
+    @Redirect(method = "method_17227", at = @At(value = "NEW", target = "(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/world/chunk/ProtoChunk;Lnet/minecraft/world/chunk/WorldChunk$EntityLoader;)Lnet/minecraft/world/chunk/WorldChunk;"))
     private WorldChunk replaceWithFakeIfNeeded(ServerWorld serverWorld, ProtoChunk protoChunk, WorldChunk.EntityLoader entityLoader) {
         if (protoChunk instanceof FakeProtoChunk)
             return new FakeWorldChunk(serverWorld, protoChunk.getPos(), ((FakeProtoChunk) protoChunk).getUpdatedTag());

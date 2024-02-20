@@ -1,8 +1,8 @@
 package me.basiqueevangelist.flashfreeze.block;
 
-import eu.pb4.polymer.api.block.PolymerBlock;
-import eu.pb4.polymer.api.client.PolymerClientDecoded;
-import eu.pb4.polymer.api.client.PolymerKeepModel;
+import eu.pb4.polymer.core.api.block.PolymerBlock;
+import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
+import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -22,7 +22,7 @@ public class UnknownBlockBlock extends Block implements PolymerBlock, PolymerKee
     }
 
     @Override
-    public Block getPolymerBlock(ServerPlayerEntity player, BlockState state) {
+    public Block getPolymerBlock(BlockState state, ServerPlayerEntity player) {
         if (player != null && ServerPlayNetworking.canSend(player, FlashFreeze.MALDENHAGEN)) {
             return this;
         }
@@ -31,7 +31,7 @@ public class UnknownBlockBlock extends Block implements PolymerBlock, PolymerKee
     }
 
     @Override
-    public BlockState getPolymerBlockState(ServerPlayerEntity player, BlockState state) {
+    public BlockState getPolymerBlockState(BlockState state, ServerPlayerEntity player) {
         if (player != null && ServerPlayNetworking.canSend(player, FlashFreeze.MALDENHAGEN)) {
             return this.getDefaultState();
         }

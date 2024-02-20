@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,14 +47,16 @@ public class AbstractComponentContainerMixin {
         }
     }
 
-    @Redirect(method = "fromTag", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"))
-    private void shhhhhhhhhh(Logger instance, String s, Object o1, Object o2) {
+    @Redirect(method = "fromTag", at = @At(value = "INVOKE", target = "Ldev/onyxstudios/cca/internal/base/ComponentsInternals;logDeserializationWarnings(Ljava/util/Collection;)V"))
+    private void shhhhhhhhhh(Collection<String> cause) {
 
     }
 
-    @Inject(method = "fromTag", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
-    private void readUnknownComponents(NbtCompound tag, CallbackInfo ci, NbtCompound componentMap, Iterator<?> someIterator, String missedKeyId) {
-        unknownComponents.put(missedKeyId, componentMap.getCompound(missedKeyId));
+    @Inject(method = "fromTag", at = @At(value = "INVOKE", target = "Ldev/onyxstudios/cca/internal/base/ComponentsInternals;logDeserializationWarnings(Ljava/util/Collection;)V"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
+    private void readUnknownComponents(NbtCompound tag, CallbackInfo ci, NbtCompound componentMap) {
+        for (var key : componentMap.getKeys()) {
+            unknownComponents.put(key, componentMap.getCompound(key));
+        }
     }
 
     @Inject(method = "toTag", at = @At(value = "RETURN"), remap = false)
