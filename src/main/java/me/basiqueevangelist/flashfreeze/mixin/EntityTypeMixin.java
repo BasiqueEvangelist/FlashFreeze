@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import me.basiqueevangelist.flashfreeze.FakeArmorStandEntity;
+import me.basiqueevangelist.flashfreeze.UnknownEntityEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
@@ -20,7 +20,7 @@ public class EntityTypeMixin {
     @Inject(method = "getEntityFromNbt", at = @At("HEAD"), cancellable = true)
     private static void makeFakeEntityIfNeeded(NbtCompound nbt, World world, CallbackInfoReturnable<Optional<Entity>> cir) {
         if (nbt.contains("id", NbtElement.STRING_TYPE) && !Registries.ENTITY_TYPE.containsId(Identifier.of(nbt.getString("id")))) {
-            cir.setReturnValue(Optional.of(new FakeArmorStandEntity(world, nbt)));
+            cir.setReturnValue(Optional.of(new UnknownEntityEntity(world, nbt)));
         }
     }
 }
