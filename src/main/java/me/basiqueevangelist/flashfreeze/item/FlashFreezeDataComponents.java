@@ -1,6 +1,5 @@
 package me.basiqueevangelist.flashfreeze.item;
 
-import eu.pb4.polymer.core.api.other.PolymerComponent;
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
@@ -19,8 +18,5 @@ public class FlashFreezeDataComponents {
     public static void init() {
         Registry.register(Registries.DATA_COMPONENT_TYPE, FlashFreeze.id("original_item_id"), ORIGINAL_ITEM_ID);
         Registry.register(Registries.DATA_COMPONENT_TYPE, FlashFreeze.id("unknown_data_components"), UNKNOWN_DATA_COMPONENTS);
-
-        // TODO: figure out why removing this fixes items, or just remove polymer.
-//        PolymerComponent.registerDataComponent(ORIGINAL_ITEM_ID, UNKNOWN_DATA_COMPONENTS);
     }
 }
