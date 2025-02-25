@@ -1,4 +1,5 @@
 {
     "block.flashfreeze.unknown_block": "Unknown Block",
-    "item.flashfreeze.unknown_item": "Unknown Item"
+    "item.flashfreeze.unknown_item": "Unknown Item",
+    "item.flashfreeze.unknown_item.broken": "Broken Unknown Item :("
 }

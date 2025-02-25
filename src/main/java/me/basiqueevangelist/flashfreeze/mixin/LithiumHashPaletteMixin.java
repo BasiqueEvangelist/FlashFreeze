@@ -1,7 +1,7 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.UnknownReplacer;
-import me.jellysquid.mods.lithium.common.world.chunk.LithiumHashPalette;
+import net.caffeinemc.mods.lithium.common.world.chunk.LithiumHashPalette;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;

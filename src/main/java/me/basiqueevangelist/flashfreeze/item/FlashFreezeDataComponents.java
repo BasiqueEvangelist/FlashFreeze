@@ -20,6 +20,7 @@ public class FlashFreezeDataComponents {
         Registry.register(Registries.DATA_COMPONENT_TYPE, FlashFreeze.id("original_item_id"), ORIGINAL_ITEM_ID);
         Registry.register(Registries.DATA_COMPONENT_TYPE, FlashFreeze.id("unknown_data_components"), UNKNOWN_DATA_COMPONENTS);
 
-        PolymerComponent.registerDataComponent(ORIGINAL_ITEM_ID, UNKNOWN_DATA_COMPONENTS);
+        // TODO: figure out why removing this fixes items, or just remove polymer.
+//        PolymerComponent.registerDataComponent(ORIGINAL_ITEM_ID, UNKNOWN_DATA_COMPONENTS);
     }
 }

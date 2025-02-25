@@ -25,7 +25,7 @@ public class UnknownItemItem extends Item implements PolymerItem, PolymerKeepMod
             return Text.of(stack.get(FlashFreezeDataComponents.ORIGINAL_ITEM_ID));
         }
 
-        return super.getName(stack);
+        return Text.translatable("item.flashfreeze.unknown_item.broken");
     }
 
     @Override
