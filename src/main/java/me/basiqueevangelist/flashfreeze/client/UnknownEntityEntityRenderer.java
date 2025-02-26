@@ -11,6 +11,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 
 public class UnknownEntityEntityRenderer extends EntityRenderer<UnknownEntityEntity> {
     private final UnknownEntityEntityModel model;
@@ -30,21 +31,18 @@ public class UnknownEntityEntityRenderer extends EntityRenderer<UnknownEntityEnt
         this.model.child = false;
 
         float h = MathHelper.lerpAngleDegrees(tickDelta, entity.prevYaw, entity.getYaw());
-        float k = 0.0f;
 
 
         float m = MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch());
 
-        k = MathHelper.wrapDegrees(k);
-
-
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F - h));
         matrices.scale(-1.0F, -1.0F, 1.0F);
         matrices.translate(0.0F, -1.501F, 0.0F);
         float o = 0.0F;
         float p = 0.0F;
 
         this.model.animateModel(entity, p, o, tickDelta);
-        this.model.setAngles(entity, p, o, 0, k, m);
+        this.model.setAngles(entity, p, o, 0, 0, 0);
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         boolean showBody = !entity.isInvisible();
 
