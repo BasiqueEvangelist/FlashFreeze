@@ -40,10 +40,10 @@ loom {
 }
 
 sourceSets {
-    testmod {
-        runtimeClasspath += main.runtimeClasspath
-        compileClasspath += main.compileClasspath
-    }
+//    testmod {
+//        runtimeClasspath += main.runtimeClasspath
+//        compileClasspath += main.compileClasspath
+//    }
 }
 
 dependencies {
@@ -65,9 +65,10 @@ dependencies {
 
     modCompileOnly "maven.modrinth:lithium:${rootProject.lithium_version}"
 
-    testmodImplementation sourceSets.main.output
+    //testmodImplementation sourceSets.main.output
 }
 
+/*
 loom {
     runs {
         testmodClient {
@@ -84,6 +85,7 @@ loom {
         }
     }
 }
+*/
 
 
 processResources {
@@ -95,14 +97,14 @@ processResources {
     }
 }
 
-processTestmodResources {
+/*processTestmodResources {
     inputs.property "version", project.version
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-}
+}*/
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
