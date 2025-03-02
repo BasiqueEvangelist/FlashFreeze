@@ -1,11 +1,12 @@
 package me.basiqueevangelist.flashfreeze.components;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // Used if the needed CCA component is not present.
 public class ComponentHolder {

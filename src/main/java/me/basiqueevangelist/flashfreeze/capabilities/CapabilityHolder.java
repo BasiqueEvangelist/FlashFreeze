@@ -1,10 +1,11 @@
 package me.basiqueevangelist.flashfreeze.capabilities;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CapabilityHolder {
     private final Map<ResourceLocation, Tag> capabilities = new HashMap<>();

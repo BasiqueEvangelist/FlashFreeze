@@ -1,11 +1,12 @@
 package me.basiqueevangelist.flashfreeze;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public record UnknownBlockState(ResourceLocation blockId, Map<String, String> properties) implements UnknownReplacer {
     public static UnknownBlockState fromTag(CompoundTag tag) {
