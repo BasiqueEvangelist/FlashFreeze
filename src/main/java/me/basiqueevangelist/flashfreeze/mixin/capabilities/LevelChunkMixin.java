@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(LevelChunk.class)
-public class WorldChunkMixin implements FabricChunkAccess {
+public class LevelChunkMixin implements FabricChunkAccess {
     @Unique private final CapabilityHolder capabilityHolder = new CapabilityHolder();
 
     @Override

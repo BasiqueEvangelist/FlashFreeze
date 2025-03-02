@@ -17,14 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PrimaryLevelData.class)
-public class LevelPropertiesMixin {
+public class PrimaryLevelDataMixin {
     @Unique private final ComponentHolder componentHolder = new ComponentHolder();
 
     @Inject(method = "parse", at = @At("RETURN"))
     private static void readCCAComponents(Dynamic<?> dynamic, LevelSettings info, PrimaryLevelData.SpecialWorldProperty specialProperty, WorldOptions generatorOptions, Lifecycle lifecycle, CallbackInfoReturnable<PrimaryLevelData> cir) {
         if (FabricLoader.getInstance().isModLoaded("cardinal-components-level")) return;
 
-        ((LevelPropertiesMixin)(Object) cir.getReturnValue()).componentHolder.fromTag((CompoundTag) dynamic.getValue());
+        ((PrimaryLevelDataMixin)(Object) cir.getReturnValue()).componentHolder.fromTag((CompoundTag) dynamic.getValue());
     }
 
     @Inject(method = "setTagData", at = @At("RETURN"))

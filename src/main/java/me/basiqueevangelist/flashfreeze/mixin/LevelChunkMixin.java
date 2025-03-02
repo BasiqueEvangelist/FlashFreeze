@@ -25,10 +25,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(LevelChunk.class)
-public abstract class WorldChunkMixin extends net.minecraft.world.level.chunk.ChunkAccess implements ChunkAccess {
+public abstract class LevelChunkMixin extends net.minecraft.world.level.chunk.ChunkAccess implements ChunkAccess {
     @Unique private final ComponentHolder componentHolder = new ComponentHolder();
 
-    public WorldChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> registry, long l, LevelChunkSection[] chunkSections, BlendingData blendingData) {
+    public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> registry, long l, LevelChunkSection[] chunkSections, BlendingData blendingData) {
         super(chunkPos, upgradeData, heightLimitView, registry, l, chunkSections, blendingData);
     }
 

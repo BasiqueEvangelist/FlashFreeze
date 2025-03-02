@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ScoreboardSaveData.class)
-public class ScoreboardStateMixin {
+public class ScoreboardSaveDataMixin {
     @Unique private final ComponentHolder componentHolder = new ComponentHolder();
 
     @Inject(method = "load", at = @At("RETURN"))

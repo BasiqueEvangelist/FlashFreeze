@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net/minecraft/world/level/chunk/PalettedContainer$Strategy$1")
-public class BlockStatePaletteProviderMixin {
+public class BlockStatePaletteStrategyMixin {
     @Inject(method = "getConfiguration", at = @At("RETURN"), cancellable = true)
     private void maldAboutIt(IdMap<BlockState> idList, int bits, CallbackInfoReturnable<PalettedContainer.Configuration<BlockState>> cir) {
         if (cir.getReturnValue().factory() == PalettedContainer.Strategy.GLOBAL_PALETTE_FACTORY) {

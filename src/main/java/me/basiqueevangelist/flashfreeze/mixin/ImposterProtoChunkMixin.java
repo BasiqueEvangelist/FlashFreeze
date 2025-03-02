@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ImposterProtoChunk.class)
-public class WrapperProtoChunkMixin implements ChunkAccess {
+public class ImposterProtoChunkMixin implements ChunkAccess {
     @Shadow @Final private LevelChunk wrapped;
 
     @Override

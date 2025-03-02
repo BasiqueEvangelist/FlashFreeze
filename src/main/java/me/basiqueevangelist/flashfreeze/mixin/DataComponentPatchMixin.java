@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.datafixers.util.Unit;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import me.basiqueevangelist.flashfreeze.FailedComponentWrapper;
-import me.basiqueevangelist.flashfreeze.access.ComponentChangesTypeAccess;
+import me.basiqueevangelist.flashfreeze.access.DataComponentPatchKeyAccess;
 import me.basiqueevangelist.flashfreeze.item.FlashFreezeDataComponents;
 import me.basiqueevangelist.flashfreeze.item.UnknownDataComponents;
 import net.minecraft.core.component.DataComponentPatch;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Mixin(DataComponentPatch.class)
-public class ComponentChangesMixin {
+public class DataComponentPatchMixin {
     @Inject(method = "method_57843", at = @At("HEAD"))
     private static void hashmapify(Map<DataComponentPatch.PatchKey, ?> changes, CallbackInfoReturnable<DataComponentPatch> cir, @Local(argsOnly = true) LocalRef<Map<DataComponentPatch.PatchKey, ?>> changesRef) {
         changesRef.set(new HashMap<>(changesRef.get()));
@@ -31,7 +31,7 @@ public class ComponentChangesMixin {
     @Inject(method = "method_57843", at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;"))
     private static void decode(Map<DataComponentPatch.PatchKey, ?> changes, CallbackInfoReturnable<DataComponentPatch> cir, @Local Reference2ObjectMap<DataComponentType<?>, Optional<?>> out) {
         for (var entry : changes.entrySet()) {
-            var componentTypeId = ((ComponentChangesTypeAccess)(Object) entry.getKey()).flashfreeze$getComponentTypeId();
+            var componentTypeId = ((DataComponentPatchKeyAccess)(Object) entry.getKey()).flashfreeze$getComponentTypeId();
             Tag value;
 
             if (componentTypeId == null) {
@@ -55,7 +55,7 @@ public class ComponentChangesMixin {
         }
 
         changes.entrySet().removeIf(entry ->
-            ((ComponentChangesTypeAccess)(Object) entry.getKey()).flashfreeze$getComponentTypeId() != null
+            ((DataComponentPatchKeyAccess)(Object) entry.getKey()).flashfreeze$getComponentTypeId() != null
             || entry.getValue() instanceof FailedComponentWrapper);
     }
 
@@ -67,7 +67,7 @@ public class ComponentChangesMixin {
 
         for (var component : unknownData.get().components().entrySet()) {
             DataComponentPatch.PatchKey type = new DataComponentPatch.PatchKey(null, component.getValue().isEmpty());
-            ((ComponentChangesTypeAccess)(Object) type).flashfreeze$setComponentTypeId(component.getKey());
+            ((DataComponentPatchKeyAccess)(Object) type).flashfreeze$setComponentTypeId(component.getKey());
 
             out.put(type, component.getValue().map(x -> (Object) x).orElse(Unit.INSTANCE));
         }

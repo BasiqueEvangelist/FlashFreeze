@@ -9,7 +9,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import me.basiqueevangelist.flashfreeze.FailedComponentWrapper;
-import me.basiqueevangelist.flashfreeze.access.ComponentChangesTypeAccess;
+import me.basiqueevangelist.flashfreeze.access.DataComponentPatchKeyAccess;
 import me.basiqueevangelist.flashfreeze.util.FlashFreezeCodecs;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentPatch;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DataComponentPatch.PatchKey.class)
-public class ComponentChangesTypeMixin implements ComponentChangesTypeAccess {
+public class DataComponentPatchKeyMixin implements DataComponentPatchKeyAccess {
     @Shadow @Final private boolean removed;
     @Unique
     private ResourceLocation componentTypeId;
@@ -46,14 +46,14 @@ public class ComponentChangesTypeMixin implements ComponentChangesTypeAccess {
     private static void decode(String id, CallbackInfoReturnable<DataResult<DataComponentPatch.PatchKey>> cir, @Local ResourceLocation componentTypeId, @Local boolean isRemoved) {
         if (!BuiltInRegistries.DATA_COMPONENT_TYPE.containsKey(componentTypeId)) {
             var type = new DataComponentPatch.PatchKey(null, isRemoved);
-            ((ComponentChangesTypeMixin)(Object) type).componentTypeId = componentTypeId;
+            ((DataComponentPatchKeyMixin)(Object) type).componentTypeId = componentTypeId;
             cir.setReturnValue(DataResult.success(type));
         }
     }
 
     @WrapOperation(method = "method_57859", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;getKey(Ljava/lang/Object;)Lnet/minecraft/resources/ResourceLocation;"))
     private static @Nullable ResourceLocation encode(Registry<DataComponentType<?>> instance, /*ComponentType<?>*/ Object componentType, Operation<ResourceLocation> original, DataComponentPatch.PatchKey changesType) {
-        var componentTypeId = ((ComponentChangesTypeAccess)(Object) changesType).flashfreeze$getComponentTypeId();
+        var componentTypeId = ((DataComponentPatchKeyAccess)(Object) changesType).flashfreeze$getComponentTypeId();
         if (componentTypeId != null) {
             return componentTypeId;
         } else {
