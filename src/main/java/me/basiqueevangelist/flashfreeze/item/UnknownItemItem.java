@@ -1,21 +1,21 @@
 package me.basiqueevangelist.flashfreeze.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.Rarity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 
 public class UnknownItemItem extends Item {
     public UnknownItemItem() {
-        super(new Item.Settings().rarity(Rarity.UNCOMMON));
+        super(new Item.Properties().rarity(Rarity.UNCOMMON));
     }
 
     @Override
-    public Text getName(ItemStack stack) {
-        if (stack.contains(FlashFreezeDataComponents.ORIGINAL_ITEM_ID)) {
-            return Text.of(stack.get(FlashFreezeDataComponents.ORIGINAL_ITEM_ID));
+    public Component getName(ItemStack stack) {
+        if (stack.has(FlashFreezeDataComponents.ORIGINAL_ITEM_ID)) {
+            return Component.translationArg(stack.get(FlashFreezeDataComponents.ORIGINAL_ITEM_ID));
         }
 
-        return Text.translatable("item.flashfreeze.unknown_item.broken");
+        return Component.translatable("item.flashfreeze.unknown_item.broken");
     }
 }

@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze;
 
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.Tag;
 
-public record FailedComponentWrapper(NbtElement original) {
+public record FailedComponentWrapper(Tag original) {
 }

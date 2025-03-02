@@ -7,12 +7,12 @@ import me.basiqueevangelist.flashfreeze.item.UnknownItemItem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
@@ -25,8 +25,8 @@ public class FlashFreeze implements ModInitializer {
     public static final UnknownBlockBlock UNKNOWN_BLOCK = new UnknownBlockBlock();
     public static final UnknownItemItem UNKNOWN_ITEM = new UnknownItemItem();
 
-    public static final EntityType<UnknownEntityEntity> UNKNOWN_ENTITY = EntityType.Builder.<UnknownEntityEntity>create(UnknownEntityEntity::new, SpawnGroup.MISC)
-        .dimensions(0.9f, 0.9f)
+    public static final EntityType<UnknownEntityEntity> UNKNOWN_ENTITY = EntityType.Builder.<UnknownEntityEntity>of(UnknownEntityEntity::new, MobCategory.MISC)
+        .sized(0.9f, 0.9f)
         .build();
 
     public void onInitialize() {
@@ -40,12 +40,12 @@ public class FlashFreeze implements ModInitializer {
 
         FlashFreezeDataComponents.init();
 
-        Registry.register(Registries.BLOCK, id("unknown_block"), UNKNOWN_BLOCK);
-        Registry.register(Registries.ITEM, id("unknown_item"), UNKNOWN_ITEM);
-        Registry.register(Registries.ENTITY_TYPE, id("unknown_entity"), UNKNOWN_ENTITY);
+        Registry.register(BuiltInRegistries.BLOCK, id("unknown_block"), UNKNOWN_BLOCK);
+        Registry.register(BuiltInRegistries.ITEM, id("unknown_item"), UNKNOWN_ITEM);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, id("unknown_entity"), UNKNOWN_ENTITY);
     }
 
-    public static Identifier id(String path) {
-        return Identifier.of(MODID, path);
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }

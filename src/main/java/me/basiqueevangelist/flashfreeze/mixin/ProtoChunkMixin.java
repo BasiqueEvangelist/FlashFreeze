@@ -2,7 +2,7 @@ package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
-import net.minecraft.world.chunk.ProtoChunk;
+import net.minecraft.world.level.chunk.ProtoChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

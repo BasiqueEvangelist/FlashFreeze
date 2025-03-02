@@ -1,6 +1,6 @@
 package me.basiqueevangelist.flashfreeze.mixin;
 
-import net.minecraft.item.ArmorStandItem;
+import net.minecraft.world.item.ArmorStandItem;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(ArmorStandItem.class)

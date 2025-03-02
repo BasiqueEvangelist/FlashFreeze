@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Pseudo
 @Mixin(value = LithiumHashPalette.class, priority = 400)
 public class LithiumHashPaletteMixin {
-    @ModifyArg(method = "writePacket", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;getRawId(Ljava/lang/Object;)I"))
+    @ModifyArg(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/IdMap;getId(Ljava/lang/Object;)I"))
     private Object transformStateIfNecessary(Object state) {
         if (state instanceof UnknownReplacer replacer)
             return replacer.toReal();
@@ -18,7 +18,7 @@ public class LithiumHashPaletteMixin {
             return state;
     }
 
-    @ModifyArg(method = "getPacketSize", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/IndexedIterable;getRawId(Ljava/lang/Object;)I"))
+    @ModifyArg(method = "getSerializedSize", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/IdMap;getId(Ljava/lang/Object;)I"))
     private Object transformStateIfNecessaryPacketSize(Object state) {
         if (state instanceof UnknownReplacer replacer)
             return replacer.toReal();

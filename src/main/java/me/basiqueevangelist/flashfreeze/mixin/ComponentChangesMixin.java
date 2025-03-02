@@ -8,10 +8,10 @@ import me.basiqueevangelist.flashfreeze.FailedComponentWrapper;
 import me.basiqueevangelist.flashfreeze.access.ComponentChangesTypeAccess;
 import me.basiqueevangelist.flashfreeze.item.FlashFreezeDataComponents;
 import me.basiqueevangelist.flashfreeze.item.UnknownDataComponents;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentType;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.Tag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,21 +21,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Mixin(ComponentChanges.class)
+@Mixin(DataComponentPatch.class)
 public class ComponentChangesMixin {
     @Inject(method = "method_57843", at = @At("HEAD"))
-    private static void hashmapify(Map<ComponentChanges.Type, ?> changes, CallbackInfoReturnable<ComponentChanges> cir, @Local(argsOnly = true) LocalRef<Map<ComponentChanges.Type, ?>> changesRef) {
+    private static void hashmapify(Map<DataComponentPatch.PatchKey, ?> changes, CallbackInfoReturnable<DataComponentPatch> cir, @Local(argsOnly = true) LocalRef<Map<DataComponentPatch.PatchKey, ?>> changesRef) {
         changesRef.set(new HashMap<>(changesRef.get()));
     }
 
     @Inject(method = "method_57843", at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;"))
-    private static void decode(Map<ComponentChanges.Type, ?> changes, CallbackInfoReturnable<ComponentChanges> cir, @Local Reference2ObjectMap<ComponentType<?>, Optional<?>> out) {
+    private static void decode(Map<DataComponentPatch.PatchKey, ?> changes, CallbackInfoReturnable<DataComponentPatch> cir, @Local Reference2ObjectMap<DataComponentType<?>, Optional<?>> out) {
         for (var entry : changes.entrySet()) {
             var componentTypeId = ((ComponentChangesTypeAccess)(Object) entry.getKey()).flashfreeze$getComponentTypeId();
-            NbtElement value;
+            Tag value;
 
             if (componentTypeId == null) {
-                componentTypeId = Registries.DATA_COMPONENT_TYPE.getId(entry.getKey().type());
+                componentTypeId = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(entry.getKey().type());
 
                 if (entry.getValue() instanceof FailedComponentWrapper fcw) {
                     value = fcw.original();
@@ -43,7 +43,7 @@ public class ComponentChangesMixin {
                     continue;
                 }
             } else {
-                value = (NbtElement) entry.getValue();
+                value = (Tag) entry.getValue();
             }
 
             UnknownDataComponents unknownComponents = (UnknownDataComponents) out.computeIfAbsent(FlashFreezeDataComponents.UNKNOWN_DATA_COMPONENTS, unused -> Optional.of(new UnknownDataComponents(new HashMap<>()))).orElseThrow();
@@ -60,13 +60,13 @@ public class ComponentChangesMixin {
     }
 
     @Inject(method = "method_57844", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/Reference2ObjectMaps;fastIterable(Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;)Lit/unimi/dsi/fastutil/objects/ObjectIterable;"))
-    private static void encode(ComponentChanges changes, CallbackInfoReturnable<Map<ComponentChanges.Type, ?>> cir, @Local Reference2ObjectMap<ComponentChanges.Type, Object> out) {
+    private static void encode(DataComponentPatch changes, CallbackInfoReturnable<Map<DataComponentPatch.PatchKey, ?>> cir, @Local Reference2ObjectMap<DataComponentPatch.PatchKey, Object> out) {
         var unknownData = changes.get(FlashFreezeDataComponents.UNKNOWN_DATA_COMPONENTS);
 
         if (unknownData == null || unknownData.isEmpty()) return;
 
         for (var component : unknownData.get().components().entrySet()) {
-            ComponentChanges.Type type = new ComponentChanges.Type(null, component.getValue().isEmpty());
+            DataComponentPatch.PatchKey type = new DataComponentPatch.PatchKey(null, component.getValue().isEmpty());
             ((ComponentChangesTypeAccess)(Object) type).flashfreeze$setComponentTypeId(component.getKey());
 
             out.put(type, component.getValue().map(x -> (Object) x).orElse(Unit.INSTANCE));

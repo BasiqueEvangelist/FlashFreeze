@@ -1,12 +1,11 @@
 package me.basiqueevangelist.flashfreeze.components;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.util.Identifier;
-
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 
 // Used if the needed CCA component is not present.
 public class ComponentHolder {
@@ -14,32 +13,32 @@ public class ComponentHolder {
 
     }
 
-    private final Map<Identifier, NbtCompound> components = new HashMap<>();
+    private final Map<ResourceLocation, CompoundTag> components = new HashMap<>();
 
-    public void fromTag(NbtCompound tag) {
+    public void fromTag(CompoundTag tag) {
         components.clear();
 
-        if (tag.contains("cardinal_components", NbtElement.LIST_TYPE)) {
-            NbtList list = (NbtList) tag.get("cardinal_components");
+        if (tag.contains("cardinal_components", Tag.TAG_LIST)) {
+            ListTag list = (ListTag) tag.get("cardinal_components");
             for (int i = 0; i < list.size(); i++) {
-                NbtCompound origComponentTag = list.getCompound(i);
-                Identifier componentId = Identifier.of(origComponentTag.getString("componentId"));
-                NbtCompound componentTag = origComponentTag.copy();
+                CompoundTag origComponentTag = list.getCompound(i);
+                ResourceLocation componentId = ResourceLocation.parse(origComponentTag.getString("componentId"));
+                CompoundTag componentTag = origComponentTag.copy();
                 componentTag.remove("componentId");
                 components.put(componentId, componentTag);
             }
-        } else if (tag.contains("cardinal_components", NbtElement.COMPOUND_TYPE)) {
-            NbtCompound componentMap = tag.getCompound("cardinal_components");
-            for (String key : componentMap.getKeys()) {
-                Identifier componentId = Identifier.of(key);
+        } else if (tag.contains("cardinal_components", Tag.TAG_COMPOUND)) {
+            CompoundTag componentMap = tag.getCompound("cardinal_components");
+            for (String key : componentMap.getAllKeys()) {
+                ResourceLocation componentId = ResourceLocation.parse(key);
                 components.put(componentId, componentMap.getCompound(key));
             }
         }
     }
 
-    public void toTag(NbtCompound tag) {
-        NbtCompound componentMap = new NbtCompound();
-        for (Map.Entry<Identifier, NbtCompound> entry : components.entrySet()) {
+    public void toTag(CompoundTag tag) {
+        CompoundTag componentMap = new CompoundTag();
+        for (Map.Entry<ResourceLocation, CompoundTag> entry : components.entrySet()) {
             componentMap.put(entry.getKey().toString(), entry.getValue());
         }
         if (!componentMap.isEmpty())

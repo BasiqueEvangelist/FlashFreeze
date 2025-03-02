@@ -8,22 +8,21 @@ import me.basiqueevangelist.flashfreeze.UnknownBiome;
 import me.basiqueevangelist.flashfreeze.UnknownBlockState;
 import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.ChunkSerializer;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ProtoChunk;
-import net.minecraft.world.poi.PointOfInterestStorage;
-import net.minecraft.world.storage.StorageKey;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ProtoChunk;
+import net.minecraft.world.level.chunk.storage.ChunkSerializer;
+import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,41 +32,41 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChunkSerializer.class)
 public class ChunkSerializerMixin {
-    @Redirect(method = "method_39797", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getBoolean(Ljava/lang/String;)Z"))
-    private static boolean dontLoadIfUnknown(NbtCompound tag, String name) {
-        if (tag.contains("id", NbtElement.STRING_TYPE)) {
+    @Redirect(method = "method_39797", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;getBoolean(Ljava/lang/String;)Z"))
+    private static boolean dontLoadIfUnknown(CompoundTag tag, String name) {
+        if (tag.contains("id", Tag.TAG_STRING)) {
             String id = tag.getString("id");
-            if (!id.equals("DUMMY") && !Registries.BLOCK_ENTITY_TYPE.containsId(Identifier.of(id)))
+            if (!id.equals("DUMMY") && !BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(ResourceLocation.parse(id)))
                 return true;
         }
 
         return tag.getBoolean(name);
     }
 
-    @Inject(method = "serialize", at = @At("RETURN"))
-    private static void writeCCAComponents(ServerWorld world, Chunk chunk, CallbackInfoReturnable<NbtCompound> cir) {
+    @Inject(method = "write", at = @At("RETURN"))
+    private static void writeCCAComponents(ServerLevel world, net.minecraft.world.level.chunk.ChunkAccess chunk, CallbackInfoReturnable<CompoundTag> cir) {
         if (FabricLoader.getInstance().isModLoaded("cardinal-components-chunk")) return;
 
-        NbtCompound targetTag = cir.getReturnValue();
+        CompoundTag targetTag = cir.getReturnValue();
         ((ChunkAccess) chunk).flashfreeze$getComponentHolder().toTag(targetTag);
     }
 
-    @Inject(method = "deserialize", at = @At("RETURN"))
-    private static void readCCAComponents(ServerWorld world, PointOfInterestStorage poiStorage, StorageKey key, ChunkPos chunkPos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
+    @Inject(method = "read", at = @At("RETURN"))
+    private static void readCCAComponents(ServerLevel world, PoiManager poiStorage, RegionStorageInfo key, ChunkPos chunkPos, CompoundTag nbt, CallbackInfoReturnable<ProtoChunk> cir) {
         if (FabricLoader.getInstance().isModLoaded("cardinal-components-chunk")) return;
 
         ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(nbt);
     }
 
-    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/PalettedContainer;createPalettedContainerCodec(Lnet/minecraft/util/collection/IndexedIterable;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/chunk/PalettedContainer$PaletteProvider;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/chunk/PalettedContainer;codecRW(Lnet/minecraft/core/IdMap;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/level/chunk/PalettedContainer$Strategy;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
     private static Codec<Object> switchBlockStateCodec(Codec<BlockState> old) {
         return new Codec<>() {
             @Override
             @SuppressWarnings({"unchecked", "rawtypes"})
             public <T> DataResult<Pair<Object, T>> decode(DynamicOps<T> ops, T input) {
-                if (ops instanceof NbtOps && input instanceof NbtCompound tag) {
-                    if (tag.contains("Name", NbtElement.STRING_TYPE)) {
-                        if (!Registries.BLOCK.containsId(Identifier.of(tag.getString("Name")))) {
+                if (ops instanceof NbtOps && input instanceof CompoundTag tag) {
+                    if (tag.contains("Name", Tag.TAG_STRING)) {
+                        if (!BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(tag.getString("Name")))) {
                             return DataResult.success(Pair.of(UnknownBlockState.fromTag(tag), ops.empty()));
                         }
                     }
@@ -79,24 +78,24 @@ public class ChunkSerializerMixin {
             @Override
             public <T> DataResult<T> encode(Object input, DynamicOps<T> ops, T prefix) {
                 if (ops instanceof NbtOps && input instanceof UnknownBlockState ubs)
-                    return DataResult.success((T) ((ubs.toTag(prefix instanceof NbtCompound ? (NbtCompound) prefix : new NbtCompound()))));
+                    return DataResult.success((T) ((ubs.toTag(prefix instanceof CompoundTag ? (CompoundTag) prefix : new CompoundTag()))));
 
                 return old.encode((BlockState) input, ops, prefix);
             }
         };
     }
 
-    @Redirect(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registry;getEntryCodec()Lcom/mojang/serialization/Codec;"))
+    @Redirect(method = "makeBiomeCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;holderByNameCodec()Lcom/mojang/serialization/Codec;"))
     private static Codec<Object> test(Registry<Biome> biomes) {
-        var old = biomes.getEntryCodec();
+        var old = biomes.holderByNameCodec();
         return new Codec<>() {
             @SuppressWarnings({"unchecked", "rawtypes"})
             @Override
             public <T> DataResult<Pair<Object, T>> decode(DynamicOps<T> ops, T input) {
-                var possibleUnknownBiome = Identifier.CODEC.decode(ops, input).result().map(Pair::getFirst);
+                var possibleUnknownBiome = ResourceLocation.CODEC.decode(ops, input).result().map(Pair::getFirst);
                 if (possibleUnknownBiome.isPresent()) {
                     var id = possibleUnknownBiome.get();
-                    if (!biomes.containsId(id)) {
+                    if (!biomes.containsKey(id)) {
                         return DataResult.success(Pair.of(new UnknownBiome(id), ops.empty()));
                     }
                 }
@@ -107,9 +106,9 @@ public class ChunkSerializerMixin {
             @Override
             public <T> DataResult<T> encode(Object input, DynamicOps<T> ops, T prefix) {
                 if (input instanceof UnknownBiome ubs)
-                    return Identifier.CODEC.encode(ubs.id(), ops, prefix);
+                    return ResourceLocation.CODEC.encode(ubs.id(), ops, prefix);
 
-                return old.encode((RegistryEntry<Biome>) input, ops, prefix);
+                return old.encode((Holder<Biome>) input, ops, prefix);
             }
         };
     }

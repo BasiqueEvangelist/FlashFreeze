@@ -1,9 +1,9 @@
 package me.basiqueevangelist.flashfreeze.access;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public interface ComponentChangesTypeAccess {
-    Identifier flashfreeze$getComponentTypeId();
+    ResourceLocation flashfreeze$getComponentTypeId();
 
-    void flashfreeze$setComponentTypeId(Identifier componentTypeId);
+    void flashfreeze$setComponentTypeId(ResourceLocation componentTypeId);
 }

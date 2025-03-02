@@ -1,8 +1,8 @@
 package me.basiqueevangelist.flashfreeze.mixin.capabilities;
 
 import me.basiqueevangelist.flashfreeze.capabilities.CapabilityHolder;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityMixin {
     @Unique private final CapabilityHolder capabilityHolder = new CapabilityHolder();
 
-    @Inject(method = "readNbt", at = @At("RETURN"))
-    private void readCapabilities(NbtCompound nbt, CallbackInfo ci) {
+    @Inject(method = "load", at = @At("RETURN"))
+    private void readCapabilities(CompoundTag nbt, CallbackInfo ci) {
         capabilityHolder.fromTag(nbt);
     }
 
-    @Inject(method = "writeNbt", at = @At("RETURN"))
-    private void writeCapabilities(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+    @Inject(method = "save", at = @At("RETURN"))
+    private void writeCapabilities(CompoundTag nbt, CallbackInfoReturnable<CompoundTag> cir) {
         capabilityHolder.toTag(nbt);
     }
 }

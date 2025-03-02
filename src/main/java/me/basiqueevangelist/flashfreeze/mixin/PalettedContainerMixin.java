@@ -2,7 +2,7 @@ package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.UnknownReplacer;
 import me.basiqueevangelist.flashfreeze.access.PalettedContainerAccess;
-import net.minecraft.world.chunk.PalettedContainer;
+import net.minecraft.world.level.chunk.PalettedContainer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,11 +18,11 @@ import java.util.function.Predicate;
 public abstract class PalettedContainerMixin implements PalettedContainerAccess {
     @Shadow protected abstract Object get(int index);
 
-    @Shadow @Final private PalettedContainer.PaletteProvider paletteProvider;
+    @Shadow @Final private PalettedContainer.Strategy strategy;
 
     private boolean flashfreeze$malding = false;
 
-    @Inject(method = "swap(ILjava/lang/Object;)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getAndSet(ILjava/lang/Object;)Ljava/lang/Object;", at = @At("RETURN"), cancellable = true)
     private void transformStateIfNeeded(int index, Object value, CallbackInfoReturnable<Object> cir) {
         if (cir.getReturnValue() instanceof UnknownReplacer replacer) {
             cir.setReturnValue(replacer.toReal());
@@ -39,7 +39,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
     }
 
     @ModifyVariable(method = "count", at = @At("HEAD"), argsOnly = true)
-    private PalettedContainer.Counter<Object> swapOutConsumer(PalettedContainer.Counter<Object> consumer) {
+    private PalettedContainer.CountConsumer<Object> swapOutConsumer(PalettedContainer.CountConsumer<Object> consumer) {
         return (obj, count) -> {
             if (obj instanceof UnknownReplacer replacer)
                 obj = replacer.toReal();
@@ -47,7 +47,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
         };
     }
 
-    @ModifyVariable(method = "forEachValue", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "getAll", at = @At("HEAD"), argsOnly = true)
     private Consumer<Object> swapOutConsumer(Consumer<Object> consumer) {
         return (obj) -> {
             if (obj instanceof UnknownReplacer replacer)
@@ -56,7 +56,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
         };
     }
 
-    @ModifyVariable(method = "hasAny", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "maybeHas", at = @At("HEAD"), argsOnly = true)
     private Predicate<Object> swapOutPredicate(Predicate<Object> original) {
         return (obj) -> {
             if (obj instanceof UnknownReplacer replacer)
@@ -68,7 +68,7 @@ public abstract class PalettedContainerMixin implements PalettedContainerAccess 
     @Override
     public UnknownReplacer getUnknown(int x, int y, int z) {
         flashfreeze$malding = true;
-        Object o = get(paletteProvider.computeIndex(x, y, z));
+        Object o = get(strategy.getIndex(x, y, z));
         flashfreeze$malding = false;
 
         if (o instanceof UnknownReplacer replacer)

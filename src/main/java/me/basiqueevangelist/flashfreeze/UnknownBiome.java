@@ -1,14 +1,14 @@
 package me.basiqueevangelist.flashfreeze;
 
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 
-public record UnknownBiome(Identifier id) implements UnknownReplacer {
+public record UnknownBiome(ResourceLocation id) implements UnknownReplacer {
     @Override
-    public RegistryEntry<Biome> toReal() {
-        return FlashFreeze.SERVER.get().getRegistryManager().get(RegistryKeys.BIOME).getEntry(BiomeKeys.THE_VOID).get();
+    public Holder<Biome> toReal() {
+        return FlashFreeze.SERVER.get().registryAccess().registryOrThrow(Registries.BIOME).getHolder(Biomes.THE_VOID).get();
     }
 }

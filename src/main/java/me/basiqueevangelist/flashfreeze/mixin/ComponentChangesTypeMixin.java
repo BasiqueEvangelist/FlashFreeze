@@ -11,12 +11,12 @@ import com.mojang.serialization.DynamicOps;
 import me.basiqueevangelist.flashfreeze.FailedComponentWrapper;
 import me.basiqueevangelist.flashfreeze.access.ComponentChangesTypeAccess;
 import me.basiqueevangelist.flashfreeze.util.FlashFreezeCodecs;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,33 +26,33 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ComponentChanges.Type.class)
+@Mixin(DataComponentPatch.PatchKey.class)
 public class ComponentChangesTypeMixin implements ComponentChangesTypeAccess {
     @Shadow @Final private boolean removed;
     @Unique
-    private Identifier componentTypeId;
+    private ResourceLocation componentTypeId;
 
     @Override
-    public Identifier flashfreeze$getComponentTypeId() {
+    public ResourceLocation flashfreeze$getComponentTypeId() {
         return componentTypeId;
     }
 
     @Override
-    public void flashfreeze$setComponentTypeId(Identifier componentTypeId) {
+    public void flashfreeze$setComponentTypeId(ResourceLocation componentTypeId) {
         this.componentTypeId = componentTypeId;
     }
 
-    @Inject(method = "method_57858", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registry;get(Lnet/minecraft/util/Identifier;)Ljava/lang/Object;"), cancellable = true)
-    private static void decode(String id, CallbackInfoReturnable<DataResult<ComponentChanges.Type>> cir, @Local Identifier componentTypeId, @Local boolean isRemoved) {
-        if (!Registries.DATA_COMPONENT_TYPE.containsId(componentTypeId)) {
-            var type = new ComponentChanges.Type(null, isRemoved);
+    @Inject(method = "method_57858", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;get(Lnet/minecraft/resources/ResourceLocation;)Ljava/lang/Object;"), cancellable = true)
+    private static void decode(String id, CallbackInfoReturnable<DataResult<DataComponentPatch.PatchKey>> cir, @Local ResourceLocation componentTypeId, @Local boolean isRemoved) {
+        if (!BuiltInRegistries.DATA_COMPONENT_TYPE.containsKey(componentTypeId)) {
+            var type = new DataComponentPatch.PatchKey(null, isRemoved);
             ((ComponentChangesTypeMixin)(Object) type).componentTypeId = componentTypeId;
             cir.setReturnValue(DataResult.success(type));
         }
     }
 
-    @WrapOperation(method = "method_57859", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"))
-    private static @Nullable Identifier encode(Registry<ComponentType<?>> instance, /*ComponentType<?>*/ Object componentType, Operation<Identifier> original, ComponentChanges.Type changesType) {
+    @WrapOperation(method = "method_57859", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;getKey(Ljava/lang/Object;)Lnet/minecraft/resources/ResourceLocation;"))
+    private static @Nullable ResourceLocation encode(Registry<DataComponentType<?>> instance, /*ComponentType<?>*/ Object componentType, Operation<ResourceLocation> original, DataComponentPatch.PatchKey changesType) {
         var componentTypeId = ((ComponentChangesTypeAccess)(Object) changesType).flashfreeze$getComponentTypeId();
         if (componentTypeId != null) {
             return componentTypeId;
@@ -61,14 +61,14 @@ public class ComponentChangesTypeMixin implements ComponentChangesTypeAccess {
         }
     }
 
-    @Inject(method = "getValueCodec", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "valueCodec", at = @At("HEAD"), cancellable = true)
     private void resetValueCodec(CallbackInfoReturnable<Codec<?>> cir) {
         if (componentTypeId != null)
             cir.setReturnValue(this.removed ? Codec.EMPTY.codec() : FlashFreezeCodecs.NBT_ELEMENT);
     }
 
     @SuppressWarnings("unchecked")
-    @ModifyReturnValue(method = "getValueCodec", at = @At("RETURN"))
+    @ModifyReturnValue(method = "valueCodec", at = @At("RETURN"))
     private Codec<?> addProtection(Codec<?> original) {
         return new Codec<Object>() {
             @Override

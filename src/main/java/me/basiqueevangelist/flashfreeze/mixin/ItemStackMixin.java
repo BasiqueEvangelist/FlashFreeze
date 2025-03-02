@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import me.basiqueevangelist.flashfreeze.FlashFreeze;
 import me.basiqueevangelist.flashfreeze.util.AlternativeCodec;
 import me.basiqueevangelist.flashfreeze.util.SerializedItemStack;
+import net.minecraft.world.item.ItemStack;
 import me.basiqueevangelist.flashfreeze.item.FlashFreezeDataComponents;
-import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -18,7 +18,7 @@ public abstract class ItemStackMixin {
             .validate(SerializedItemStack::validateUnknown)
             .xmap(x -> {
                 ItemStack stack = new ItemStack(FlashFreeze.UNKNOWN_ITEM, x.count());
-                stack.applyChanges(x.components());
+                stack.applyComponentsAndValidate(x.components());
                 stack.set(FlashFreezeDataComponents.ORIGINAL_ITEM_ID, x.id());
                 return stack;
             }, SerializedItemStack::from);
@@ -32,7 +32,7 @@ public abstract class ItemStackMixin {
             .validate(SerializedItemStack::validateUnknown)
             .xmap(x -> {
                 ItemStack stack = new ItemStack(FlashFreeze.UNKNOWN_ITEM, x.count());
-                stack.applyChanges(x.components());
+                stack.applyComponentsAndValidate(x.components());
                 stack.set(FlashFreezeDataComponents.ORIGINAL_ITEM_ID, x.id());
                 return stack;
             }, SerializedItemStack::from);

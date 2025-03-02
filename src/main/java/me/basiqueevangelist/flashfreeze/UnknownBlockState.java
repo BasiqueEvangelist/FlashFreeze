@@ -1,23 +1,21 @@
 package me.basiqueevangelist.flashfreeze;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.util.Identifier;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 
-public record UnknownBlockState(Identifier blockId, Map<String, String> properties) implements UnknownReplacer {
-    public static UnknownBlockState fromTag(NbtCompound tag) {
-        Identifier blockId = Identifier.of(tag.getString("Name"));
+public record UnknownBlockState(ResourceLocation blockId, Map<String, String> properties) implements UnknownReplacer {
+    public static UnknownBlockState fromTag(CompoundTag tag) {
+        ResourceLocation blockId = ResourceLocation.parse(tag.getString("Name"));
         Map<String, String> properties = new HashMap<>();
 
-        if (tag.contains("Properties", NbtElement.COMPOUND_TYPE)) {
-            NbtCompound propertiesTag = tag.getCompound("Properties");
+        if (tag.contains("Properties", Tag.TAG_COMPOUND)) {
+            CompoundTag propertiesTag = tag.getCompound("Properties");
 
-            for (String key : propertiesTag.getKeys()) {
+            for (String key : propertiesTag.getAllKeys()) {
                 properties.put(key, propertiesTag.getString(key));
             }
         }
@@ -25,9 +23,9 @@ public record UnknownBlockState(Identifier blockId, Map<String, String> properti
         return new UnknownBlockState(blockId, properties);
     }
 
-    public NbtCompound toTag(NbtCompound tag) {
+    public CompoundTag toTag(CompoundTag tag) {
         tag.putString("Name", blockId.toString());
-        NbtCompound propsTag = new NbtCompound();
+        CompoundTag propsTag = new CompoundTag();
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             propsTag.putString(entry.getKey(), entry.getValue());
         }
@@ -62,6 +60,6 @@ public record UnknownBlockState(Identifier blockId, Map<String, String> properti
 
     @Override
     public BlockState toReal() {
-        return FlashFreeze.UNKNOWN_BLOCK.getDefaultState();
+        return FlashFreeze.UNKNOWN_BLOCK.defaultBlockState();
     }
 }

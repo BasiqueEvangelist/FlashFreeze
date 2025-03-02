@@ -2,28 +2,28 @@ package me.basiqueevangelist.flashfreeze.mixin;
 
 import me.basiqueevangelist.flashfreeze.components.ComponentHolder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.scoreboard.ScoreboardState;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.scores.ScoreboardSaveData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ScoreboardState.class)
+@Mixin(ScoreboardSaveData.class)
 public class ScoreboardStateMixin {
     @Unique private final ComponentHolder componentHolder = new ComponentHolder();
 
-    @Inject(method = "readNbt", at = @At("RETURN"))
-    private void readCCAComponents(NbtCompound nbt, RegistryWrapper.WrapperLookup registries, CallbackInfoReturnable<ScoreboardState> cir) {
+    @Inject(method = "load", at = @At("RETURN"))
+    private void readCCAComponents(CompoundTag nbt, HolderLookup.Provider registries, CallbackInfoReturnable<ScoreboardSaveData> cir) {
         if (FabricLoader.getInstance().isModLoaded("cardinal-components-scoreboard")) return;
 
         componentHolder.fromTag(nbt);
     }
 
-    @Inject(method = "writeNbt", at = @At("RETURN"))
-    private void writeCCAComponents(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfoReturnable<NbtCompound> cir) {
+    @Inject(method = "save", at = @At("RETURN"))
+    private void writeCCAComponents(CompoundTag nbt, HolderLookup.Provider registryLookup, CallbackInfoReturnable<CompoundTag> cir) {
         if (FabricLoader.getInstance().isModLoaded("cardinal-components-scoreboard")) return;
 
         componentHolder.toTag(nbt);

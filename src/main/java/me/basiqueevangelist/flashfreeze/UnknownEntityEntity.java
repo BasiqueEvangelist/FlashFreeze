@@ -1,98 +1,98 @@
 package me.basiqueevangelist.flashfreeze;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class UnknownEntityEntity extends Entity {
-    private NbtCompound originalData;
+    private CompoundTag originalData;
 
-    public UnknownEntityEntity(World world, NbtCompound originalData) {
+    public UnknownEntityEntity(Level world, CompoundTag originalData) {
         super(FlashFreeze.UNKNOWN_ENTITY, world);
         this.originalData = originalData;
 
-        setCustomName(Text.of(originalData.getString("id")));
+        setCustomName(Component.nullToEmpty(originalData.getString("id")));
         setCustomNameVisible(true);
 
-        NbtList pos = originalData.getList("Pos", NbtElement.DOUBLE_TYPE);
-        this.setPosition(pos.getDouble(0), pos.getDouble(1), pos.getDouble(2));
+        ListTag pos = originalData.getList("Pos", Tag.TAG_DOUBLE);
+        this.setPos(pos.getDouble(0), pos.getDouble(1), pos.getDouble(2));
 
-        NbtList rot = originalData.getList("Rotation", NbtElement.FLOAT_TYPE);
-        this.setRotation(rot.getFloat(0), rot.getFloat(1));
+        ListTag rot = originalData.getList("Rotation", Tag.TAG_FLOAT);
+        this.setRot(rot.getFloat(0), rot.getFloat(1));
     }
 
-    public UnknownEntityEntity(EntityType<UnknownEntityEntity> entityType, World world) {
+    public UnknownEntityEntity(EntityType<UnknownEntityEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         nbt.put("OriginalData", originalData);
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         originalData = nbt.getCompound("OriginalData");
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return true;
     }
 
     @Override
-    public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand) {
-        return ActionResult.FAIL;
+    public InteractionResult interactAt(Player player, Vec3 hitPos, InteractionHand hand) {
+        return InteractionResult.FAIL;
     }
 
     @Override
-    public boolean damage(DamageSource source, float amount) {
-        if (this.getWorld().isClient || this.isRemoved()) return false;
-        if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.level().isClientSide || this.isRemoved()) return false;
+        if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             this.kill();
             return false;
         }
-        if (!source.isSourceCreativePlayer()) return false;
+        if (!source.isCreativePlayer()) return false;
 
-        this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_BREAK, this.getSoundCategory(), 1.0F, 1.0F);
-        ((ServerWorld)this.getWorld()).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.getDefaultState()), this.getX(), this.getBodyY(0.6666666666666666), this.getZ(), 10, (double)(this.getWidth() / 4.0F), (double)(this.getHeight() / 4.0F), (double)(this.getWidth() / 4.0F), 0.05);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARMOR_STAND_BREAK, this.getSoundSource(), 1.0F, 1.0F);
+        ((ServerLevel)this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.defaultBlockState()), this.getX(), this.getY(0.6666666666666666), this.getZ(), 10, (double)(this.getBbWidth() / 4.0F), (double)(this.getBbHeight() / 4.0F), (double)(this.getBbWidth() / 4.0F), 0.05);
         this.kill();
 
         return true;
     }
 
     @Override
-    public boolean saveNbt(NbtCompound nbt) {
-        nbt.copyFrom(originalData);
+    public boolean save(CompoundTag nbt) {
+        nbt.merge(originalData);
         if (getVehicle() != null)
-            nbt.put("Pos", toNbtList(getVehicle().getX(), getY(), getVehicle().getZ()));
+            nbt.put("Pos", newDoubleList(getVehicle().getX(), getY(), getVehicle().getZ()));
         else
-            nbt.put("Pos", toNbtList(getX(), getY(), getZ()));
-        nbt.put("Rotation", toNbtList(getYaw(), getPitch()));
+            nbt.put("Pos", newDoubleList(getX(), getY(), getZ()));
+        nbt.put("Rotation", newFloatList(getYRot(), getXRot()));
         return true;
     }
 
-    public NbtCompound getOriginalData() {
+    public CompoundTag getOriginalData() {
         return originalData;
     }
 }
