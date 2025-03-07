@@ -7,3 +7,5 @@ accessible method net/minecraft/world/level/chunk/PalettedContainer$Configuratio
 
 accessible class net/minecraft/core/component/DataComponentPatch$PatchKey
 accessible method net/minecraft/core/component/DataComponentPatch$PatchKey <init> (Lnet/minecraft/core/component/DataComponentType;Z)V
+
+accessible class net/minecraft/server/PlayerAdvancements$Data
