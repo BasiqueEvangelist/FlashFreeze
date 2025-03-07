@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_version_range}"
+license = "LGPL-3.0-only"
+issueTrackerURL="https://github.com/BasiqueEvangelist/FlashFreeze/issues/"
+
+[[mods]]
+modId = "flashfreeze"
+version = "${version}"
+displayName = "FlashFreeze"
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional (see https://docs.neoforged.net/docs/misc/updatechecker/)
+displayURL="https://modrinth.com/mod/flashfreeze"
+logoFile="icon.png"
+credits="Jetsparrow"
+authors = "BasiqueEvangelist"
+description = '''Keep unknown blocks and items'''
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
+[[mixins]]
+config = "${mod_id}.neoforge.mixins.json"
+
+[[dependencies.flashfreeze]]
+modId = "neoforge"
+type="required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.flashfreeze]]
+modId = "minecraft"
+type="required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"

@@ -1,9 +1,0 @@
-accessWidener v2 named
-
-accessible class net/minecraft/world/chunk/PalettedContainer$DataProvider
-accessible field net/minecraft/world/chunk/PalettedContainer$PaletteProvider ID_LIST Lnet/minecraft/world/chunk/Palette$Factory;
-accessible class net/minecraft/world/chunk/PalettedContainer$DataProvider
-accessible method net/minecraft/world/chunk/PalettedContainer$DataProvider <init> (Lnet/minecraft/world/chunk/Palette$Factory;I)V
-
-accessible class net/minecraft/component/ComponentChanges$Type
-accessible method net/minecraft/component/ComponentChanges$Type <init> (Lnet/minecraft/component/ComponentType;Z)V

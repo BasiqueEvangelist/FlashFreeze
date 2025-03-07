@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "me.basiqueevangelist.flashfreeze.fabric.mixin",
+    "refmap": "flashfreeze.refmap.json",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "AttachmentSerializingImplMixin"
+    ],
+    "client": [
+    ],
+    "server": [],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
+  

@@ -1,0 +1,35 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "me.basiqueevangelist.flashfreeze.mixin",
+    "compatibilityLevel": "JAVA_16",
+    "mixins": [
+        "ArmorStandItemMixin",
+        "BlockEntityMixin",
+        "BlockStatePaletteStrategyMixin",
+        "ChunkSerializerMixin",
+        "DataComponentPatchMixin",
+        "DataComponentPatchKeyMixin",
+        "EntityMixin",
+        "EntityTypeMixin",
+        "ItemStackMixin",
+        "PrimaryLevelDataMixin",
+        "LithiumHashPaletteMixin",
+        "PalettedContainerAccessor",
+        "PalettedContainerMixin",
+        "PaletteMixin",
+        "ProtoChunkMixin",
+        "ScoreboardSaveDataMixin",
+        "LevelChunkMixin",
+        "ImposterProtoChunkMixin",
+        "capabilities.BlockEntityMixin",
+        "capabilities.ChunkSerializerMixin",
+        "capabilities.EntityMixin",
+        "capabilities.ProtoChunkMixin",
+        "capabilities.LevelChunkMixin",
+        "capabilities.ImposterProtoChunkMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
