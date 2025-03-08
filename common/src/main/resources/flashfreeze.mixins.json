@@ -23,6 +23,7 @@
         "PrimaryLevelDataMixin",
         "ProtoChunkMixin",
         "ScoreboardSaveDataMixin",
+        "ServerRecipeBookMixin",
         "ServerStatsCounterMixin",
         "capabilities.BlockEntityMixin",
         "capabilities.ChunkSerializerMixin",
