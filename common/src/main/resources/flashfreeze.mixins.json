@@ -33,5 +33,6 @@
     ],
     "injectors": {
         "defaultRequire": 1
-  }
+    },
+    "refmap": "flashfreeze.refmap.json"
 }
