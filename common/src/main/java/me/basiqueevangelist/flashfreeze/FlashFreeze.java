@@ -19,24 +19,24 @@ public class FlashFreeze {
 
     public static WeakReference<MinecraftServer> SERVER;
 
-    public static final Supplier<UnknownBlockBlock> UNKNOWN_BLOCK = FlashFreezePlatform.I.register(
+    public static final Supplier<UnknownBlockBlock> UNKNOWN_BLOCK = FlashFreezePlatform.I.registerWithKey(
         Registries.BLOCK,
         id("unknown_block"),
         UnknownBlockBlock::new
     );
 
-    public static final Supplier<UnknownItemItem> UNKNOWN_ITEM = FlashFreezePlatform.I.register(
+    public static final Supplier<UnknownItemItem> UNKNOWN_ITEM = FlashFreezePlatform.I.registerWithKey(
         Registries.ITEM,
         id("unknown_item"),
         UnknownItemItem::new
     );
 
-    public static final Supplier<EntityType<UnknownEntityEntity>> UNKNOWN_ENTITY = FlashFreezePlatform.I.register(
+    public static final Supplier<EntityType<UnknownEntityEntity>> UNKNOWN_ENTITY = FlashFreezePlatform.I.registerWithKey(
         Registries.ENTITY_TYPE,
         id("unknown_entity"),
-        () -> EntityType.Builder.<UnknownEntityEntity>of(UnknownEntityEntity::new, MobCategory.MISC)
+        key -> EntityType.Builder.<UnknownEntityEntity>of(UnknownEntityEntity::new, MobCategory.MISC)
             .sized(0.9f, 0.9f)
-            .build("")
+            .build(key)
     );
 
     public static void init() {

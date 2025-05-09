@@ -10,10 +10,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 
-public class UnknownEntityEntityRenderer extends EntityRenderer<UnknownEntityEntity> {
+import static net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords;
+
+public class UnknownEntityEntityRenderer extends EntityRenderer<UnknownEntityEntity, UnknownEntityEntityRenderState> {
     private final UnknownEntityEntityModel model;
 
     public UnknownEntityEntityRenderer(EntityRendererProvider.Context context) {
@@ -23,61 +27,44 @@ public class UnknownEntityEntityRenderer extends EntityRenderer<UnknownEntityEnt
     }
 
     @Override
-    public void render(UnknownEntityEntity entity, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light) {
-        matrices.pushPose();
-
-        this.model.attackTime = 0;
-        this.model.riding = false;
-        this.model.young = false;
-
-        float h = Mth.rotLerp(tickDelta, entity.yRotO, entity.getYRot());
-
-
-        float m = Mth.lerp(tickDelta, entity.xRotO, entity.getXRot());
-
-        matrices.mulPose(Axis.YP.rotationDegrees(180.0F - h));
-        matrices.scale(-1.0F, -1.0F, 1.0F);
-        matrices.translate(0.0F, -1.501F, 0.0F);
-        float o = 0.0F;
-        float p = 0.0F;
-
-        this.model.prepareMobModel(entity, p, o, tickDelta);
-        this.model.setupAnim(entity, p, o, 0, 0, 0);
-        Minecraft minecraftClient = Minecraft.getInstance();
-        boolean showBody = !entity.isInvisible();
-
-        // 		Identifier identifier = this.getTexture(entity);
-        //		if (translucent) {
-        //			return RenderLayer.getItemEntityTranslucentCull(identifier);
-        //		} else if (showBody) {
-        //			return this.model.getLayer(identifier);
-        //		} else {
-        //			return showOutline ? RenderLayer.getOutline(identifier) : null;
-        //		}
-        boolean translucent = !showBody && !entity.isInvisibleTo(minecraftClient.player);
-        boolean showOutline = minecraftClient.shouldEntityAppearGlowing(entity);
-
-        RenderType renderLayer;
-
-        if (translucent) {
-            renderLayer = RenderType.itemEntityTranslucentCull(getTextureLocation(entity));
-        } else if (showBody) {
-            renderLayer = this.model.renderType(getTextureLocation(entity));
-        } else {
-            renderLayer = showOutline ? RenderType.outline(getTextureLocation(entity)) : null;
-        }
-
-        if (renderLayer != null) {
-            VertexConsumer vertexConsumer = vertexConsumers.getBuffer(renderLayer);
-            this.model.renderToBuffer(matrices, vertexConsumer, light, 0, translucent ? 654311423 : -1);
-        }
-
-        matrices.popPose();
-        super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
+    public UnknownEntityEntityRenderState createRenderState() {
+        return new UnknownEntityEntityRenderState();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(UnknownEntityEntity entity) {
+    public void extractRenderState(UnknownEntityEntity entity, UnknownEntityEntityRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.isInvisibleToPlayer = state.isInvisible && entity.isInvisibleTo(Minecraft.getInstance().player);
+
+        state.yRot = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+        state.xRot = entity.getXRot(partialTick);
+    }
+
+    @Override
+    public void render(UnknownEntityEntityRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        poseStack.pushPose();
+
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - renderState.yRot));
+
+        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        poseStack.translate(0.0F, -1.501F, 0.0F);
+        this.model.setupAnim(renderState);
+        boolean bl = true;
+        boolean bl2 = false;
+        RenderType renderType = this.model.renderType(this.getTextureLocation(renderState));
+
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(renderType);
+        int j = OverlayTexture.pack(OverlayTexture.u(0), OverlayTexture.v(false));
+        int k = -1;
+        int l = ARGB.multiply(k, -1);
+        this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, j, l);
+
+
+        poseStack.popPose();
+        super.render(renderState, poseStack, bufferSource, packedLight);
+    }
+
+    public ResourceLocation getTextureLocation(UnknownEntityEntityRenderState renderState) {
         return FlashFreeze.id("textures/entity/unknown_entity.png");
     }
 }

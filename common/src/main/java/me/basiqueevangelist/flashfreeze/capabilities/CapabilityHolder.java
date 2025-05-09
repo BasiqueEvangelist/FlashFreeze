@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class CapabilityHolder {
     private final Map<ResourceLocation, Tag> capabilities = new HashMap<>();
@@ -13,11 +14,12 @@ public class CapabilityHolder {
     public void fromTag(CompoundTag tag) {
         capabilities.clear();
 
-        if (tag.contains("ForgeCaps", Tag.TAG_COMPOUND)) {
-            CompoundTag componentMap = tag.getCompound("ForgeCaps");
-            for (String key : componentMap.getAllKeys()) {
+
+        Optional<CompoundTag> componentMap = tag.getCompound("ForgeCaps");
+        if (componentMap.isPresent()) {
+            for (String key : componentMap.get().keySet()) {
                 ResourceLocation componentId = ResourceLocation.parse(key);
-                capabilities.put(componentId, componentMap.get(key));
+                capabilities.put(componentId, componentMap.get().get(key));
             }
         }
     }

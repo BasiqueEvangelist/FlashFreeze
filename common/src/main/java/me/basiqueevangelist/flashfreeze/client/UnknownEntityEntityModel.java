@@ -13,7 +13,7 @@ import net.minecraft.client.model.geom.builders.*;
 // Made with Blockbench 4.12.1
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class UnknownEntityEntityModel extends EntityModel<UnknownEntityEntity> {
+public class UnknownEntityEntityModel extends EntityModel<UnknownEntityEntityRenderState> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(FlashFreeze.id("unknown_entity"), "main");
 
 	private final ModelPart e;
@@ -23,7 +23,8 @@ public class UnknownEntityEntityModel extends EntityModel<UnknownEntityEntity> {
 	private final ModelPart r3;
 
 	public UnknownEntityEntityModel(ModelPart root) {
-		this.e = root.getChild("e");
+        super(root);
+        this.e = root.getChild("e");
 		this.r1 = root.getChild("r1");
 		this.r2 = root.getChild("r2");
 		this.o = root.getChild("o");
@@ -64,19 +65,5 @@ public class UnknownEntityEntityModel extends EntityModel<UnknownEntityEntity> {
 		.texOffs(3, 1).addBox(-2.0F, -6.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
 		.texOffs(4, 1).addBox(-2.0F, -9.0F, -1.0F, 1.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-7.0F, 24.0F, 0.0F));
 		return LayerDefinition.create(modelData, 16, 16);
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
-		e.render(matrices, vertexConsumer, light, overlay);
-		r1.render(matrices, vertexConsumer, light, overlay);
-		r2.render(matrices, vertexConsumer, light, overlay);
-		o.render(matrices, vertexConsumer, light, overlay);
-		r3.render(matrices, vertexConsumer, light, overlay);
-	}
-
-	@Override
-	public void setupAnim(UnknownEntityEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-
 	}
 }

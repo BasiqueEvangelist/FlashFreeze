@@ -19,20 +19,25 @@ public class ComponentHolder {
     public void fromTag(CompoundTag tag) {
         components.clear();
 
-        if (tag.contains("cardinal_components", Tag.TAG_LIST)) {
-            ListTag list = (ListTag) tag.get("cardinal_components");
+        var listOpt = tag.getList("cardinal_components");
+        if (listOpt.isPresent()) {
+            ListTag list = listOpt.get();
             for (int i = 0; i < list.size(); i++) {
-                CompoundTag origComponentTag = list.getCompound(i);
-                ResourceLocation componentId = ResourceLocation.parse(origComponentTag.getString("componentId"));
+                CompoundTag origComponentTag = list.getCompound(i).orElseThrow();
+                ResourceLocation componentId = ResourceLocation.parse(origComponentTag.getString("componentId").orElseThrow());
                 CompoundTag componentTag = origComponentTag.copy();
                 componentTag.remove("componentId");
                 components.put(componentId, componentTag);
             }
-        } else if (tag.contains("cardinal_components", Tag.TAG_COMPOUND)) {
-            CompoundTag componentMap = tag.getCompound("cardinal_components");
-            for (String key : componentMap.getAllKeys()) {
-                ResourceLocation componentId = ResourceLocation.parse(key);
-                components.put(componentId, componentMap.getCompound(key));
+        } else {
+            var componentMapOpt = tag.getCompound("cardinal_components");
+
+            if (componentMapOpt.isPresent()) {
+                CompoundTag componentMap = componentMapOpt.get();
+                for (String key : componentMap.keySet()) {
+                    ResourceLocation componentId = ResourceLocation.parse(key);
+                    components.put(componentId, componentMap.getCompound(key).orElseThrow());
+                }
             }
         }
     }

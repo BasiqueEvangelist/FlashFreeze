@@ -49,7 +49,7 @@ public abstract class LevelChunkMixin extends net.minecraft.world.level.chunk.Ch
 
     @Inject(method = "promotePendingBlockEntity", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 1), cancellable = true)
     private void shhhhhhh(BlockPos pos, CompoundTag nbt, CallbackInfoReturnable<BlockEntity> cir) {
-        ResourceLocation id = ResourceLocation.tryParse(nbt.getString("id"));
+        ResourceLocation id = ResourceLocation.tryParse(nbt.getString("id").orElse(""));
 
         if (id != null && !BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(id)) {
             cir.setReturnValue(null);

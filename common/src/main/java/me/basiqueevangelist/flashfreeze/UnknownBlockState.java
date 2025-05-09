@@ -10,14 +10,15 @@ import java.util.Map;
 
 public record UnknownBlockState(ResourceLocation blockId, Map<String, String> properties) implements UnknownReplacer {
     public static UnknownBlockState fromTag(CompoundTag tag) {
-        ResourceLocation blockId = ResourceLocation.parse(tag.getString("Name"));
+        ResourceLocation blockId = ResourceLocation.parse(tag.getString("Name").orElseThrow());
         Map<String, String> properties = new HashMap<>();
 
-        if (tag.contains("Properties", Tag.TAG_COMPOUND)) {
-            CompoundTag propertiesTag = tag.getCompound("Properties");
+        var propertiesOpt = tag.getCompound("Properties");
+        if (propertiesOpt.isPresent()) {
+            CompoundTag propertiesTag = propertiesOpt.get();
 
-            for (String key : propertiesTag.getAllKeys()) {
-                properties.put(key, propertiesTag.getString(key));
+            for (String key : propertiesTag.keySet()) {
+                properties.put(key, propertiesTag.getString(key).orElseThrow());
             }
         }
 

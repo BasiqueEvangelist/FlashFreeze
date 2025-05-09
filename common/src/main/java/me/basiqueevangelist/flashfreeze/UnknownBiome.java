@@ -9,6 +9,6 @@ import net.minecraft.world.level.biome.Biomes;
 public record UnknownBiome(ResourceLocation id) implements UnknownReplacer {
     @Override
     public Holder<Biome> toReal() {
-        return FlashFreeze.SERVER.get().registryAccess().registryOrThrow(Registries.BIOME).getHolder(Biomes.THE_VOID).get();
+        return FlashFreeze.SERVER.get().registryAccess().getOrThrow(Biomes.THE_VOID);
     }
 }

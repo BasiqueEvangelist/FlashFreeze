@@ -42,7 +42,7 @@ public class DataComponentPatchKeyMixin implements DataComponentPatchKeyAccess {
         this.componentTypeId = componentTypeId;
     }
 
-    @Inject(method = {"lambda$static$2", "method_57858"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;get(Lnet/minecraft/resources/ResourceLocation;)Ljava/lang/Object;"), cancellable = true)
+    @Inject(method = {"lambda$static$2", "method_57858"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;getValue(Lnet/minecraft/resources/ResourceLocation;)Ljava/lang/Object;"), cancellable = true)
     private static void decode(String id, CallbackInfoReturnable<DataResult<DataComponentPatch.PatchKey>> cir, @Local ResourceLocation componentTypeId, @Local boolean isRemoved) {
         if (!BuiltInRegistries.DATA_COMPONENT_TYPE.containsKey(componentTypeId)) {
             var type = new DataComponentPatch.PatchKey(null, isRemoved);

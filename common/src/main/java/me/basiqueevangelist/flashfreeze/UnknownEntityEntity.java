@@ -18,6 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 public class UnknownEntityEntity extends Entity {
@@ -27,14 +28,14 @@ public class UnknownEntityEntity extends Entity {
         super(FlashFreeze.UNKNOWN_ENTITY.get(), world);
         this.originalData = originalData;
 
-        setCustomName(Component.nullToEmpty(originalData.getString("id")));
+        setCustomName(Component.nullToEmpty(originalData.getString("id").orElseThrow()));
         setCustomNameVisible(true);
 
-        ListTag pos = originalData.getList("Pos", Tag.TAG_DOUBLE);
-        this.setPos(pos.getDouble(0), pos.getDouble(1), pos.getDouble(2));
+        Vec3 pos = originalData.read("Pos", Vec3.CODEC).orElse(Vec3.ZERO);;
+        this.setPos(pos);
 
-        ListTag rot = originalData.getList("Rotation", Tag.TAG_FLOAT);
-        this.setRot(rot.getFloat(0), rot.getFloat(1));
+        Vec2 rot = originalData.read("Rotation", Vec2.CODEC).orElse(Vec2.ZERO);
+        this.setRot(rot.y, rot.x);
     }
 
     public UnknownEntityEntity(EntityType<UnknownEntityEntity> entityType, Level world) {
@@ -48,7 +49,7 @@ public class UnknownEntityEntity extends Entity {
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
-        originalData = nbt.getCompound("OriginalData");
+        originalData = nbt.getCompound("OriginalData").orElseGet(CompoundTag::new);
     }
 
     @Override
@@ -66,17 +67,17 @@ public class UnknownEntityEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (this.level().isClientSide || this.isRemoved()) return false;
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            this.kill();
+            this.kill(level);
             return false;
         }
         if (!source.isCreativePlayer()) return false;
 
-        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARMOR_STAND_BREAK, this.getSoundSource(), 1.0F, 1.0F);
-        ((ServerLevel)this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.defaultBlockState()), this.getX(), this.getY(0.6666666666666666), this.getZ(), 10, (double)(this.getBbWidth() / 4.0F), (double)(this.getBbHeight() / 4.0F), (double)(this.getBbWidth() / 4.0F), 0.05);
-        this.kill();
+        level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARMOR_STAND_BREAK, this.getSoundSource(), 1.0F, 1.0F);
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.defaultBlockState()), this.getX(), this.getY(0.6666666666666666), this.getZ(), 10, (double)(this.getBbWidth() / 4.0F), (double)(this.getBbHeight() / 4.0F), (double)(this.getBbWidth() / 4.0F), 0.05);
+        this.kill(level);
 
         return true;
     }
@@ -84,12 +85,20 @@ public class UnknownEntityEntity extends Entity {
     @Override
     public boolean save(CompoundTag nbt) {
         nbt.merge(originalData);
-        if (getVehicle() != null)
-            nbt.put("Pos", newDoubleList(getVehicle().getX(), getY(), getVehicle().getZ()));
-        else
-            nbt.put("Pos", newDoubleList(getX(), getY(), getZ()));
-        nbt.put("Rotation", newFloatList(getYRot(), getXRot()));
+
+        if (getVehicle() != null) {
+            nbt.store("Pos", Vec3.CODEC, new Vec3(getVehicle().getX(), this.getY(), getVehicle().getZ()));
+        } else {
+            nbt.store("Pos", Vec3.CODEC, this.position());
+        }
+
+        nbt.store("Rotation", Vec2.CODEC, new Vec2(this.getYRot(), this.getXRot()));
         return true;
+    }
+
+    @Override
+    public boolean isPickable() {
+        return !this.isRemoved();
     }
 
     public CompoundTag getOriginalData() {

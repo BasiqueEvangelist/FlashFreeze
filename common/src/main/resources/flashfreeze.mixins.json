@@ -7,7 +7,7 @@
         "ArmorStandItemMixin",
         "BlockEntityMixin",
         "BlockStatePaletteStrategyMixin",
-        "ChunkSerializerMixin",
+        "SerializableChunkDataMixin",
         "DataComponentPatchKeyMixin",
         "DataComponentPatchMixin",
         "EntityMixin",
@@ -22,15 +22,10 @@
         "PlayerAdvancementsMixin",
         "PrimaryLevelDataMixin",
         "ProtoChunkMixin",
-        "ScoreboardSaveDataMixin",
         "ServerRecipeBookMixin",
         "ServerStatsCounterMixin",
         "capabilities.BlockEntityMixin",
-        "capabilities.ChunkSerializerMixin",
-        "capabilities.EntityMixin",
-        "capabilities.ImposterProtoChunkMixin",
-        "capabilities.LevelChunkMixin",
-        "capabilities.ProtoChunkMixin"
+        "capabilities.EntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

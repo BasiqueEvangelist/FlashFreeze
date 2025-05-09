@@ -6,56 +6,32 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import me.basiqueevangelist.flashfreeze.UnknownBiome;
 import me.basiqueevangelist.flashfreeze.UnknownBlockState;
-import me.basiqueevangelist.flashfreeze.access.ChunkAccess;
-import me.basiqueevangelist.flashfreeze.util.FlashFreezePlatform;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ProtoChunk;
-import net.minecraft.world.level.chunk.storage.ChunkSerializer;
-import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
+import net.minecraft.world.level.chunk.storage.SerializableChunkData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ChunkSerializer.class)
-public class ChunkSerializerMixin {
-    @Redirect(method = {"lambda$postLoadChunk$10", "method_39797"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;getBoolean(Ljava/lang/String;)Z"))
-    private static boolean dontLoadIfUnknown(CompoundTag tag, String name) {
-        if (tag.contains("id", Tag.TAG_STRING)) {
-            String id = tag.getString("id");
+@Mixin(SerializableChunkData.class)
+public class SerializableChunkDataMixin {
+    @Redirect(method = {"lambda$postLoadChunk$12", "method_61797"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;getBooleanOr(Ljava/lang/String;Z)Z"))
+    private static boolean dontLoadIfUnknown(CompoundTag instance, String key, boolean defaultValue) {
+        if (instance.contains("id")) {
+            String id = instance.getStringOr("id", "");
+
             if (!id.equals("DUMMY") && !BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(ResourceLocation.parse(id)))
                 return true;
         }
 
-        return tag.getBoolean(name);
-    }
-
-    @Inject(method = "write", at = @At("RETURN"))
-    private static void writeCCAComponents(ServerLevel world, net.minecraft.world.level.chunk.ChunkAccess chunk, CallbackInfoReturnable<CompoundTag> cir) {
-        if (FlashFreezePlatform.I.isModLoaded("cardinal-components-chunk")) return;
-
-        CompoundTag targetTag = cir.getReturnValue();
-        ((ChunkAccess) chunk).flashfreeze$getComponentHolder().toTag(targetTag);
-    }
-
-    @Inject(method = "read", at = @At("RETURN"))
-    private static void readCCAComponents(ServerLevel world, PoiManager poiStorage, RegionStorageInfo key, ChunkPos chunkPos, CompoundTag nbt, CallbackInfoReturnable<ProtoChunk> cir) {
-        if (FlashFreezePlatform.I.isModLoaded("cardinal-components-chunk")) return;
-
-        ((ChunkAccess) cir.getReturnValue()).flashfreeze$getComponentHolder().fromTag(nbt);
+        return instance.getBooleanOr(key, defaultValue);
     }
 
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/chunk/PalettedContainer;codecRW(Lnet/minecraft/core/IdMap;Lcom/mojang/serialization/Codec;Lnet/minecraft/world/level/chunk/PalettedContainer$Strategy;Ljava/lang/Object;)Lcom/mojang/serialization/Codec;"))
@@ -65,8 +41,8 @@ public class ChunkSerializerMixin {
             @SuppressWarnings({"unchecked", "rawtypes"})
             public <T> DataResult<Pair<Object, T>> decode(DynamicOps<T> ops, T input) {
                 if (ops instanceof NbtOps && input instanceof CompoundTag tag) {
-                    if (tag.contains("Name", Tag.TAG_STRING)) {
-                        if (!BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(tag.getString("Name")))) {
+                    if (tag.contains("Name")) {
+                        if (!BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(tag.getStringOr("Name", "")))) {
                             return DataResult.success(Pair.of(UnknownBlockState.fromTag(tag), ops.empty()));
                         }
                     }

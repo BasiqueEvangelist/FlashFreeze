@@ -15,7 +15,7 @@ public class FlashFreezePlatformFabric implements FlashFreezePlatform {
     public <T> Supplier<T> register(ResourceKey<? extends Registry<?>> registryKey, ResourceLocation id, Supplier<T> supplier) {
         T instance = supplier.get();
 
-        Registry.register((Registry<? super T>) BuiltInRegistries.REGISTRY.get(registryKey.location()), id, instance);
+        Registry.register((Registry<? super T>) BuiltInRegistries.REGISTRY.getValue(registryKey.location()), id, instance);
 
         return () -> instance;
     }
