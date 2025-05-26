@@ -6,6 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import me.basiqueevangelist.flashfreeze.UnknownBiome;
 import me.basiqueevangelist.flashfreeze.UnknownBlockState;
+import me.basiqueevangelist.flashfreeze.util.UnknownBlock;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.storage.SerializableChunkData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -85,6 +87,33 @@ public class SerializableChunkDataMixin {
                     return ResourceLocation.CODEC.encode(ubs.id(), ops, prefix);
 
                 return old.encode((Holder<Biome>) input, ops, prefix);
+            }
+        };
+    }
+
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/ticks/SavedTick;codec(Lcom/mojang/serialization/Codec;)Lcom/mojang/serialization/Codec;", ordinal = 0))
+    private static Codec<Block> switchOutBlockCodec(Codec<Block> codec) {
+        return new Codec<Block>() {
+            @Override
+            public <T> DataResult<Pair<Block, T>> decode(DynamicOps<T> ops, T input) {
+                var asString = ops.getStringValue(input).result().orElse(null);
+                if (asString != null) {
+                    var asId = ResourceLocation.tryParse(asString);
+
+                    if (asId != null && !BuiltInRegistries.BLOCK.containsKey(asId))
+                        return DataResult.success(Pair.of(new UnknownBlock(asId), ops.empty()));
+                }
+
+                return codec.decode(ops, input);
+            }
+
+            @Override
+            public <T> DataResult<T> encode(Block input, DynamicOps<T> ops, T prefix) {
+                if (input instanceof UnknownBlock unk) {
+                    return DataResult.success(ops.createString(unk.id().toString()));
+                }
+
+                return codec.encode(input, ops, prefix);
             }
         };
     }
