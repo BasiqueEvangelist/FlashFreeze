@@ -101,7 +101,7 @@ public class SerializableChunkDataMixin {
                     var asId = ResourceLocation.tryParse(asString);
 
                     if (asId != null && !BuiltInRegistries.BLOCK.containsKey(asId))
-                        return DataResult.success(Pair.of(new UnknownBlock(asId), ops.empty()));
+                        return DataResult.success(Pair.of(UnknownBlock.get(asId), ops.empty()));
                 }
 
                 return codec.decode(ops, input);
