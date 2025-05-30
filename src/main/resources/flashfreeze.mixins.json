@@ -10,7 +10,6 @@
         "ChunkSerializerMixin",
         "EntityMixin",
         "EntityTypeMixin",
-        "IngredientMixin",
         "ItemStackMixin",
         "LevelPropertiesMixin",
         "LithiumHashPaletteMixin",
